@@ -1,0 +1,40 @@
+plugins {
+    id 'java'
+    id 'org.springframework.boot' version '3.0.2'
+    id 'io.spring.dependency-management' version '1.1.0'
+}
+
+group = 'com.tensing'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+
+    // spring boot web dependency
+    implementation 'org.springframework.boot:spring-boot-starter-web'
+
+    // servlet dependency
+    compileOnly 'org.springframework.boot:spring-boot-starter-tomcat'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // test database dependency
+    testImplementation 'com.h2database:h2:2.1.214'
+
+    // yaml 자동완성 및 변수 매칭 기능, spring assistant plugin install 및 설정 필요 할수도 in idea
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
+    // lombok dependency
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+    testCompileOnly 'org.projectlombok:lombok'
+    testAnnotationProcessor 'org.projectlombok:lombok'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
