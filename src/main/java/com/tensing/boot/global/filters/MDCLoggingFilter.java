@@ -1,4 +1,4 @@
-package com.tensing.boot.global.filter;
+package com.tensing.boot.global.filters;
 
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
