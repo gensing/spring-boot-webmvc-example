@@ -1,5 +1,6 @@
 server:
   port: 80
+#server.servlet.context-path= /
 spring:
   profiles:
     active: local
@@ -9,7 +10,8 @@ spring:
   #web:
     #resources:
       #add-mappings: false
-
 logging:
   file: ./log
+  charset:
+    console: UTF-8
   config: classpath:logback-spring.xml

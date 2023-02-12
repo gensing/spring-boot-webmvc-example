@@ -5,5 +5,24 @@ spring:
       jdbc-url: jdbc:h2:mem:test
       username: sa
       password: null
+  jpa:
+    database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
+    database: mysql
+    show-sql: true
+    generate-ddl: true
+spring-doc:
+  api-docs:
+    path: /api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    display-request-duration: true
+    enabled: true
 tensing:
-  enable: true
+  swagger:
+    enable: true
+  jwt:
+    tokenName: Authorization
+    secretKey: 11111111111111111111111111111111
+    expirationInMs: 1296000000 # 1000 * 60 * 60 * 24 * 30
+    signatureAlgorithm: HS512
