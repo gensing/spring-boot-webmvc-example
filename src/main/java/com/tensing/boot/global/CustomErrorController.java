@@ -1,6 +1,6 @@
-package com.tensing.boot.global.advice.exception;
+package com.tensing.boot.global;
 
-import com.tensing.boot.global.CommonResponse;
+import com.tensing.boot.global.advice.exception.ErrorMessages;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import org.springframework.boot.web.servlet.error.ErrorController;
@@ -18,9 +18,10 @@ public class CustomErrorController implements ErrorController {
 
     // HandlerExceptionResolver 확인해보기 - 현재는 에러 발생시 dispacther 에서 mdc가 소멸한다.
 
+    // 이곳을 타면 웹어서 검은 배경이 적용되어 보인다 ( 코드 문제가 아닌 /error url을 어디서 캐취하는 듯 )... postman 테스트시 상관 없음.
     // "/error" 매핑이 호출 되는 경우들을 확인하기. 현재 확인: spring 영역이 아닌 곳에서 일어나는 에러는 이곳을 탄다.
     @GetMapping(value = "/error", consumes = {MediaType.ALL_VALUE}, produces = {MediaType.APPLICATION_JSON_VALUE})
-    public ResponseEntity<CommonResponse<ErrorMessages>> error(HttpServletRequest request) {
+    public ResponseEntity<ErrorMessages> error(HttpServletRequest request) {
 
         Object status = request.getAttribute(RequestDispatcher.ERROR_STATUS_CODE);
         int statusCode = status == null ? HttpStatus.OK.value() : Integer.valueOf(status.toString());
@@ -33,10 +34,7 @@ public class CustomErrorController implements ErrorController {
 
         return ResponseEntity
                 .status(statusCode)
-                .body(CommonResponse.<ErrorMessages>builder()
-                        .status(statusCode)
-                        .body(ErrorMessages.of(message)) // status 받을 수 있게 변경.
-                        .build());
+                .body(ErrorMessages.of(message));
     }
 
 }
