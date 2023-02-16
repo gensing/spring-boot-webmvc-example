@@ -4,7 +4,6 @@ import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
 import org.springframework.beans.factory.FactoryBean;
 import org.springframework.boot.context.properties.ConfigurationProperties;
-import org.springframework.boot.jdbc.DataSourceBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.orm.jpa.JpaTransactionManager;
@@ -15,14 +14,14 @@ import org.springframework.transaction.PlatformTransactionManager;
 
 import javax.sql.DataSource;
 
-//@EntityScan(basePackageClasses = { BootApplication.class, Jsr310JpaConverters.class })
+//@EntityScan(basePackageClasses = { BootApplication.class, Jsr310JpaConverters.class }) // yaml 설정 사용시
 @Configuration
 public class JPAConfiguration {
 
     @Bean
-    @ConfigurationProperties("spring.datasource.mariadb")
+    @ConfigurationProperties("spring.datasource.hikari")
     public DataSource dataSource() {
-        return DataSourceBuilder.create().type(HikariDataSource.class).build();
+        return new HikariDataSource();
     }
 
     @Bean
