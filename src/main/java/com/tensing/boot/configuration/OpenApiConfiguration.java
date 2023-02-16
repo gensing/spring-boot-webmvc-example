@@ -1,9 +1,13 @@
 package com.tensing.boot.configuration;
 
 import io.swagger.v3.oas.annotations.OpenAPIDefinition;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeIn;
+import io.swagger.v3.oas.annotations.enums.SecuritySchemeType;
 import io.swagger.v3.oas.annotations.info.Contact;
 import io.swagger.v3.oas.annotations.info.Info;
+import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpHeaders;
 
 @OpenAPIDefinition(
         info = @Info(
@@ -15,6 +19,14 @@ import org.springframework.context.annotation.Configuration;
                         email = "sample@email.co.kr"
                 )
         )
+)
+@SecurityScheme(
+        name = "api_key",
+        type = SecuritySchemeType.HTTP,
+        in = SecuritySchemeIn.HEADER,
+        paramName = HttpHeaders.AUTHORIZATION,
+        bearerFormat = "JWT",
+        scheme = "Bearer"
 )
 @Configuration
 public class OpenApiConfiguration {
