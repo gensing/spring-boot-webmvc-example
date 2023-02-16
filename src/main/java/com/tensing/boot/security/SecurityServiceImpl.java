@@ -3,54 +3,67 @@ package com.tensing.boot.security;
 import com.tensing.boot.global.advice.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.ErrorCode;
 import com.tensing.boot.modules.TokenProvider;
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.ExpiredJwtException;
-import io.jsonwebtoken.MalformedJwtException;
-import io.jsonwebtoken.UnsupportedJwtException;
+import com.tensing.boot.security.entity.Member;
+import com.tensing.boot.security.payload.SecurityDto;
+import com.tensing.boot.security.repository.MemberRepository;
+import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.authority.AuthorityUtils;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
+import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Collection;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
+@Transactional
+@Service
 @Slf4j
 @RequiredArgsConstructor
-@Service
 public class SecurityServiceImpl implements SecurityService {
 
     private final TokenProvider tokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final MemberRepository memberRepository;
 
     // 가입
     @Override
-    public String signup() {
-        final String encPassword = passwordEncoder.encode("");
-        // .save();
-        return "토큰이 아니라 다른 정보를 리턴 필요";
+    public void signup(SecurityDto.SignupRequest signupRequest) {
+        Member member = Member.builder()
+                .username(signupRequest.getUsername())
+                .password(passwordEncoder.encode(signupRequest.getPassword()))
+                .build();
+        memberRepository.save(member);
     }
 
-    // 입증
+    // 인증
     @Override
-    public String authentication() {
-        final String encPassword = passwordEncoder.encode("");
-        final String savedPassword = ""; // .findOne();
+    public SecurityDto.LoginResponse login(SecurityDto.LoginRequest loginRequest) {
+
+        final Member member = memberRepository.findByUsername(loginRequest.getUsername());
+
+        if (member == null)
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 
         // 에러 코드 생성 필요
-        if (encPassword != savedPassword) throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        if (!passwordEncoder.matches(loginRequest.getPassword(), member.getPassword()))
+            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
 
-        String jwt = ""; // 토큰 생성
-        return jwt;
+        Claims claims = Jwts.claims().setSubject("access");
+        claims.put("userId", member.getId());
+
+        final String accessToken = tokenProvider.generateToken(claims);
+
+        return SecurityDto.LoginResponse.builder()
+                .accessToken(accessToken)
+                .build();
     }
 
     // 권한 부여
     @Override
-    public UsernamePasswordAuthenticationToken authorization(String token) {
-
-        if (token == null) return null;
+    public UsernamePasswordAuthenticationToken getUsernamePasswordAuthenticationTokenByAccessToken(String token) {
 
         final Claims claims;
 
@@ -70,11 +83,13 @@ public class SecurityServiceImpl implements SecurityService {
             throw new BusinessException(ErrorCode.INVALID_JWT);
         }
 
-        final Long id = claims.get("id", Long.class);
-        final Collection<?> role = claims.get("role", Collection.class);
+        final Long id = claims.get("userId", Long.class);
 
-        if (id == null || role == null) throw new BusinessException(ErrorCode.INVALID_JWT);
+        if (id == null) {
+            log.info("JWT userId is null.");
+            throw new BusinessException(ErrorCode.INVALID_JWT);
+        }
 
-        return new UsernamePasswordAuthenticationToken(id, "", AuthorityUtils.commaSeparatedStringToAuthorityList(StringUtils.collectionToCommaDelimitedString(role)));
+        return new UsernamePasswordAuthenticationToken(id, null, Stream.of(new SimpleGrantedAuthority("ROLE_USER")).collect(Collectors.toList()));
     }
 }

@@ -28,6 +28,8 @@ dependencies {
 
     // jwt dependency
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
+    runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
     // swagger dependency ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
@@ -38,7 +40,7 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // test database dependency
-    testImplementation 'com.h2database:h2:2.1.214'
+    runtimeOnly 'com.h2database:h2:2.1.214'
 
     // yaml 자동완성 및 변수 매칭 기능, spring assistant plugin install 및 설정 필요 할수도 in idea
     implementation 'org.springframework.boot:spring-boot-configuration-processor'

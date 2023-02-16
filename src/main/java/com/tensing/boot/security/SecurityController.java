@@ -1,27 +1,38 @@
 package com.tensing.boot.security;
 
-import com.tensing.boot.security.payload.SignInRequest;
-import com.tensing.boot.security.payload.SignUpRequest;
-import com.tensing.boot.security.payload.TokenResponse;
+import com.tensing.boot.security.payload.SecurityDto;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.http.HttpStatus;
+import org.springframework.security.access.annotation.Secured;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.web.bind.annotation.*;
 
+@RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
 public class SecurityController {
 
-    private SecurityService securityService;
+    private final SecurityService securityService;
 
     @PostMapping("/signup")
-    public TokenResponse signup(SignUpRequest signUpRequest) {
-        String token = securityService.signup();
-        return TokenResponse.builder().token(token).build();
+    @ResponseStatus(HttpStatus.CREATED)
+    public void signup(@RequestBody SecurityDto.SignupRequest signupRequest) {
+        securityService.signup(signupRequest);
     }
 
     @PostMapping("/login")
-    public TokenResponse login(SignInRequest signInRequest) {
-        String token = securityService.authentication();
-        return TokenResponse.builder().token(token).build();
+    @ResponseStatus(HttpStatus.OK)
+    public SecurityDto.LoginResponse login(@RequestBody SecurityDto.LoginRequest loginRequest) {
+        return securityService.login(loginRequest);
+    }
+
+    //@RolesAllowed(value = "USER")
+    @SecurityRequirement(name = "api_key")
+    @PostMapping("/security")
+    @Secured(value = "ROLE_USER")
+    @ResponseStatus(HttpStatus.OK)
+    public String security(@AuthenticationPrincipal long userId) {
+        return "security userId: " + userId;
     }
 }

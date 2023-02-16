@@ -1,16 +1,13 @@
 package com.tensing.boot.security;
 
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.HttpHeaders;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
-import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
@@ -24,7 +21,7 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfiguration {
 
-    private final SecurityService SecurityService;
+    private final SecurityService securityServiceImpl;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -49,18 +46,7 @@ public class SecurityConfiguration {
         // http.authorizeRequests().anyRequest().permitAll();
 
         // add jwt authorization filter
-        //http.addFilterBefore(new JwtAuthorizationFilter(jwtTokenProvider), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore((req, res, chain) -> {
-
-            final String authToken = ((HttpServletRequest) req).getHeader(HttpHeaders.AUTHORIZATION);
-
-            final UsernamePasswordAuthenticationToken authentication = SecurityService.authorization(authToken);
-
-            if (authentication != null) SecurityContextHolder.getContext().setAuthentication(authentication);
-
-            chain.doFilter(req, res);
-
-        }, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(new JwtAuthorizationFilter(HttpHeaders.AUTHORIZATION, securityServiceImpl), UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
