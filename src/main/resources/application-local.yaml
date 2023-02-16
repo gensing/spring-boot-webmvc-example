@@ -1,4 +1,8 @@
 spring:
+  h2:
+   console:
+     enabled: true
+     path: /h2-console
   datasource:
     hikari:
       driver-class-name: org.h2.Driver
@@ -18,11 +22,11 @@ spring-doc:
     path: /swagger-ui.html
     display-request-duration: true
     enabled: true
+
+
 tensing:
-  swagger:
-    enable: true
   jwt:
     tokenName: Authorization
-    secretKey: a5034fc5-ba14-45e3-a51b-6ecc93cc8383
+    secretKey: Q4NSl604sgydJj1awEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSf4XXyYJkal13eqgB0F5Bqaa
     expirationInMs: 1296000000 # 1000 * 60 * 60 * 24 * 30
     signatureAlgorithm: HS512
