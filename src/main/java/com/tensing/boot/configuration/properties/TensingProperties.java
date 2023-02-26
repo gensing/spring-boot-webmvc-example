@@ -6,7 +6,6 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "tensing")
 public record TensingProperties(
-        SwaggerProperties swagger,
         JwtProperties jwt
 ) {
     public record JwtProperties(
@@ -17,8 +16,4 @@ public record TensingProperties(
     ) {
     }
 
-    public record SwaggerProperties(
-            boolean enable
-    ) {
-    }
 }
