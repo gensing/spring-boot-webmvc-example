@@ -20,28 +20,32 @@ dependencies {
     // servlet dependency
     compileOnly 'org.springframework.boot:spring-boot-starter-tomcat'
 
+    // spring and hibernate validation dependency
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+
     // spring security dependency
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
     // jpa dependency
     implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
 
+    // swagger dependency ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.2'
+
+    // test dependency
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+
+    // yaml 자동완성 및 변수 매칭 기능, spring assistant plugin install 및 설정 필요 할수도 in idea
+    implementation 'org.springframework.boot:spring-boot-configuration-processor'
+
     // jwt dependency
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
-    // swagger dependency ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.2'
-
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
-
     // test database dependency
     runtimeOnly 'com.h2database:h2:2.1.214'
-
-    // yaml 자동완성 및 변수 매칭 기능, spring assistant plugin install 및 설정 필요 할수도 in idea
-    implementation 'org.springframework.boot:spring-boot-configuration-processor'
 
     // lombok dependency
     compileOnly 'org.projectlombok:lombok'
