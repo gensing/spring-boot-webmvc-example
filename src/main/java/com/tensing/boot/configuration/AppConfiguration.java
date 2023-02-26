@@ -1,7 +1,7 @@
 package com.tensing.boot.configuration;
 
 import com.tensing.boot.configuration.properties.TensingProperties;
-import com.tensing.boot.modules.TokenProvider;
+import com.tensing.boot.security.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

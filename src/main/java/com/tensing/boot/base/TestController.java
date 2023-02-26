@@ -1,4 +1,4 @@
-package com.tensing.boot;
+package com.tensing.boot.base;
 
 import com.tensing.boot.configuration.OpenApiConfiguration;
 import com.tensing.boot.security.entity.RoleCode;
@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RequiredArgsConstructor
 @RestController
-public class BaseController {
+public class TestController {
     
     @GetMapping("/security")
     @Secured(value = RoleCode.USER_VALUE)

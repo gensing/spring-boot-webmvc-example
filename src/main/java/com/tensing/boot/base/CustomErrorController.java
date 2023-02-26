@@ -1,4 +1,4 @@
-package com.tensing.boot.global;
+package com.tensing.boot.base;
 
 import com.tensing.boot.global.advice.exception.ErrorMessages;
 import jakarta.servlet.RequestDispatcher;

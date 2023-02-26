@@ -2,7 +2,6 @@ package com.tensing.boot.security;
 
 import com.tensing.boot.global.advice.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.ErrorCode;
-import com.tensing.boot.modules.TokenProvider;
 import com.tensing.boot.security.entity.Member;
 import com.tensing.boot.security.entity.RoleCode;
 import com.tensing.boot.security.payload.SecurityDto;
