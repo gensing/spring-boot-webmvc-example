@@ -21,7 +21,7 @@ import org.springframework.http.HttpHeaders;
         )
 )
 @SecurityScheme(
-        name = "api_key",
+        name = OpenApiConfiguration.API_SCHEME_NAME_001,
         type = SecuritySchemeType.HTTP,
         in = SecuritySchemeIn.HEADER,
         paramName = HttpHeaders.AUTHORIZATION,
@@ -30,5 +30,6 @@ import org.springframework.http.HttpHeaders;
 )
 @Configuration
 public class OpenApiConfiguration {
+    public static final String API_SCHEME_NAME_001 = "api_key";
 
 }
