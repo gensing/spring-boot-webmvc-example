@@ -1,5 +1,6 @@
 package com.tensing.boot.security;
 
+import com.tensing.boot.security.entity.RoleCode;
 import com.tensing.boot.security.payload.SecurityDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -27,10 +28,9 @@ public class SecurityController {
         return securityService.login(loginRequest);
     }
 
-    //@RolesAllowed(value = "USER")
     @SecurityRequirement(name = "api_key")
     @PostMapping("/security")
-    @Secured(value = "ROLE_USER")
+    @Secured(value = RoleCode.USER_VALUE)
     @ResponseStatus(HttpStatus.OK)
     public String security(@AuthenticationPrincipal long userId) {
         return "security userId: " + userId;

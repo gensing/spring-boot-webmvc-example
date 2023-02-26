@@ -4,6 +4,7 @@ import com.tensing.boot.global.advice.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.ErrorCode;
 import com.tensing.boot.modules.TokenProvider;
 import com.tensing.boot.security.entity.Member;
+import com.tensing.boot.security.entity.RoleCode;
 import com.tensing.boot.security.payload.SecurityDto;
 import com.tensing.boot.security.repository.MemberRepository;
 import io.jsonwebtoken.*;
@@ -34,6 +35,7 @@ public class SecurityServiceImpl implements SecurityService {
         Member member = Member.builder()
                 .username(signupRequest.getUsername())
                 .password(passwordEncoder.encode(signupRequest.getPassword()))
+                .roles(Stream.of(RoleCode.USER).collect(Collectors.toUnmodifiableSet()))
                 .build();
         memberRepository.save(member);
     }
@@ -90,6 +92,6 @@ public class SecurityServiceImpl implements SecurityService {
             throw new BusinessException(ErrorCode.INVALID_JWT);
         }
 
-        return new UsernamePasswordAuthenticationToken(id, null, Stream.of(new SimpleGrantedAuthority("ROLE_USER")).collect(Collectors.toList()));
+        return new UsernamePasswordAuthenticationToken(id, null, Stream.of(new SimpleGrantedAuthority(RoleCode.USER.getRoleName())).toList());
     }
 }
