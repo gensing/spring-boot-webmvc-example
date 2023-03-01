@@ -1,7 +1,8 @@
 package com.tensing.boot.configuration;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.configuration.properties.TensingProperties;
-import com.tensing.boot.security.TokenProvider;
+import com.tensing.boot.common.entity.module.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -25,5 +26,11 @@ public class AppConfiguration {
     public PasswordEncoder passwordEncoder() {
         PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
         return passwordEncoder;
+    }
+
+    @Bean
+    public ObjectMapper objectMapper() {
+        ObjectMapper objectMapper = new ObjectMapper();
+        return objectMapper;
     }
 }

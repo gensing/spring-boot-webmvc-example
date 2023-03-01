@@ -1,6 +1,6 @@
 package com.tensing.boot.configuration;
 
-import com.tensing.boot.global.filters.MDCLoggingFilter;
+import com.tensing.boot.common.filters.MDCLoggingFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.Ordered;
