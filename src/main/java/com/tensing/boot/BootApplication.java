@@ -14,7 +14,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 
 @Slf4j
 @RequiredArgsConstructor
-@EnableJpaAuditing // AuditingEntityListener 사용을 위한 설정
+//@EnableJpaAuditing // AuditingEntityListener 사용을 위한 설정
 @SpringBootApplication
 public class BootApplication implements ApplicationRunner {
 
