@@ -10,12 +10,16 @@ import lombok.Getter;
 public enum ErrorCode {
 
     // Security
-    NOT_FOUND_MEMBER(400, "M001", "not found member data"),
-    INVALID_JWT(400, "M002", "invalid jwt token"),
+    NOT_FOUND_MEMBER(400, "S001", "not found member data"),
+    INVALID_JWT(400, "S002", "invalid jwt token"),
+
+    // member
+    DUPLICATION_USER(400, "M001", "exists user name"),
 
     // Common
     COMMON_ERROR(400, "C001", "Common error"),
     HANDLE_ACCESS_DENIED(403, "C002", "access denied"),
+    BAD_REQUEST(400, "C003", "bad request"),
     INTERNAL_SERVER_ERROR(500, "C000", "Internal server error");
 
 

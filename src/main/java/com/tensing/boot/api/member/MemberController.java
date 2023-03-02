@@ -2,6 +2,7 @@ package com.tensing.boot.api.member;
 
 import com.tensing.boot.api.member.payload.MemberDto;
 import com.tensing.boot.api.member.service.MemberService;
+import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,7 +16,7 @@ public class MemberController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signup(@RequestBody MemberDto.MemberRequest postRequest) {
+    public void signup(@RequestBody @Valid MemberDto.MemberRequest postRequest) {
         memberService.signup(postRequest);
     }
 
