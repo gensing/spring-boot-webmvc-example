@@ -34,8 +34,7 @@ public class SecurityServiceImpl implements SecurityService {
         final Member member = memberService.getMemberByUserNameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
 
         // 입력 정보에 해당하는 유저를 찾을 수 없음.
-        if (member == null)
-            throw new BusinessException(ErrorCode.INTERNAL_SERVER_ERROR);
+        if (member == null) throw new BusinessException(ErrorCode.NOT_FOUND_MEMBER);
 
         Claims claims = Jwts.claims().setSubject("access");
         claims.put("userId", member.getId());
