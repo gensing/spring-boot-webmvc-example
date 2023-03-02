@@ -32,6 +32,7 @@ public class MemberServiceImpl implements MemberService {
 
         final var member = Member.builder()
                 .username(postRequest.getUsername())
+                .email(postRequest.getEmail())
                 .password(passwordEncoder.encode(postRequest.getPassword()))
                 .roles(Stream.of(RoleCode.USER).collect(Collectors.toUnmodifiableSet()))
                 .build();
