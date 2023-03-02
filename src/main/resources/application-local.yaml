@@ -22,8 +22,6 @@ spring-doc:
     path: /swagger-ui.html
     display-request-duration: true
     enabled: true
-
-
 tensing:
   jwt:
     tokenName: Authorization
