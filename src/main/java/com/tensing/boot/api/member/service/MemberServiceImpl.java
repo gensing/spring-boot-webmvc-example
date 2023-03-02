@@ -5,13 +5,17 @@ import com.tensing.boot.api.member.payload.MemberDto;
 import com.tensing.boot.api.member.repository.MemberRepository;
 import com.tensing.boot.security.code.RoleCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Transactional
 @Service
+@Slf4j
 @RequiredArgsConstructor
 public class MemberServiceImpl implements MemberService {
 
