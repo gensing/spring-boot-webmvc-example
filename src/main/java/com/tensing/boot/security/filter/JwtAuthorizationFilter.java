@@ -32,8 +32,12 @@ public class JwtAuthorizationFilter extends OncePerRequestFilter {
         final String accessToken = resolveToken(request.getHeader(HttpHeaders.AUTHORIZATION));
 
         if (StringUtils.hasText(accessToken)) {
-            final Authentication authentication = securityService.getAuthentication(accessToken);
-            SecurityContextHolder.getContext().setAuthentication(authentication);
+            try {
+                final Authentication authentication = securityService.getAuthentication(accessToken);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+            }catch (Exception e){
+                response.sendError(HttpServletResponse.SC_BAD_REQUEST, "invalid access token");
+            }
         }
 
         filterChain.doFilter(request, response);
