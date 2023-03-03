@@ -31,16 +31,16 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest) {
 
-        final Member member = memberService.getMemberByUserNameAndPassword(loginRequest.getUsername(), loginRequest.getPassword());
+        final Member member = memberService.findMember(loginRequest.getUsername(), loginRequest.getPassword())
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
 
-        // 입력 정보에 해당하는 유저를 찾을 수 없음.
-        if (member == null) throw new BusinessException(ErrorCode.NOT_FOUND_MEMBER);
-
-        Claims claims = Jwts.claims().setSubject("access");
+        final Claims claims = Jwts.claims().setSubject("access");
         claims.put("userId", member.getId());
 
+        final var accessToken = tokenProvider.generateToken(claims);
+
         return SecurityDto.TokenResponse.builder()
-                .accessToken(tokenProvider.generateToken(claims))
+                .accessToken(accessToken)
                 .build();
     }
 
