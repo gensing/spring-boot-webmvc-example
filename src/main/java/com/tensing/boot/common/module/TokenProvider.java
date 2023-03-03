@@ -1,4 +1,4 @@
-package com.tensing.boot.common.entity.module;
+package com.tensing.boot.common.module;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
