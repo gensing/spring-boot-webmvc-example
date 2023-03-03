@@ -9,5 +9,5 @@ public interface SecurityService {
     SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest);
 
     // 검증
-    Authentication getAuthentication(String token);
+    Authentication getAuthentication(String accessToken);
 }

@@ -12,7 +12,6 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Optional;
 import java.util.Set;
 
 @Transactional
@@ -41,10 +40,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public Optional<Member> findMember(String username, String password) {
+    public Member findMember(String username, String password) {
         final var member = memberRepository.findByUsername(username);
-        return (member.isPresent() & passwordEncoder.matches(password, member.get().getPassword()))
-                ? member
-                : Optional.of(null);
+        // 체크 필요
+        return (member.isPresent() && passwordEncoder.matches(password, member.get().getPassword()))
+                ? member.get()
+                : null;
     }
 }
