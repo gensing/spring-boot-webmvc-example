@@ -5,9 +5,12 @@ import com.tensing.boot.api.member.service.MemberService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-@RequestMapping("/api/member")
+import java.net.URI;
+
+@RequestMapping("/api/members")
 @RequiredArgsConstructor
 @RestController
 public class MemberController {
@@ -16,8 +19,9 @@ public class MemberController {
 
     @PostMapping("")
     @ResponseStatus(HttpStatus.CREATED)
-    public void signup(@RequestBody @Valid MemberDto.MemberRequest postRequest) {
-        memberService.signup(postRequest);
+    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberDto.MemberRequest postRequest) {
+        final var memberId = memberService.createMember(postRequest);
+        return ResponseEntity.created(URI.create("/api/members/" + memberId)).build();
     }
 
 }

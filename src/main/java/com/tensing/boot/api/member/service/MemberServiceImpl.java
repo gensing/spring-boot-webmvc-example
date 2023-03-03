@@ -12,6 +12,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Optional;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
@@ -25,7 +26,7 @@ public class MemberServiceImpl implements MemberService {
     private final MemberRepository memberRepository;
 
     @Override
-    public void signup(MemberDto.MemberRequest postRequest) {
+    public long createMember(MemberDto.MemberRequest postRequest) {
 
         if (memberRepository.existsByUsername(postRequest.getUsername()))
             throw new BusinessException(ErrorCode.DUPLICATION_USER);
@@ -37,13 +38,14 @@ public class MemberServiceImpl implements MemberService {
                 .roles(Stream.of(RoleCode.USER).collect(Collectors.toUnmodifiableSet()))
                 .build();
 
-        memberRepository.save(member);
+        return memberRepository.save(member).getId();
     }
 
     @Override
-    public Member getMemberByUserNameAndPassword(String username, String password) {
-        final var member = memberRepository.findByUsername(username).orElse(null);
-        if (member == null) return null;
-        return passwordEncoder.matches(password, member.getPassword()) ? member : null;
+    public Optional<Member> findMember(String username, String password) {
+        final var member = memberRepository.findByUsername(username);
+        return (member.isPresent() & passwordEncoder.matches(password, member.get().getPassword()))
+                ? member
+                : Optional.of(null);
     }
 }
