@@ -13,8 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Optional;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Set;
 
 @Transactional
 @Service
@@ -35,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
                 .username(postRequest.getUsername())
                 .email(postRequest.getEmail())
                 .password(passwordEncoder.encode(postRequest.getPassword()))
-                .roles(Stream.of(RoleCode.USER).collect(Collectors.toUnmodifiableSet()))
+                .roles(Set.of(RoleCode.USER))
                 .build();
 
         return memberRepository.save(member).getId();
