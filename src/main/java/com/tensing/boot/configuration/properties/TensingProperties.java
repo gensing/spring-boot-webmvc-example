@@ -12,7 +12,10 @@ public record TensingProperties(
             String tokenName,
             String secretKey,
             int expirationInMs,
-            SignatureAlgorithm signatureAlgorithm
+            SignatureAlgorithm signatureAlgorithm,
+            String refreshSecretKey,
+            int refreshExpirationInMs,
+            SignatureAlgorithm refreshSignatureAlgorithm
     ) {
     }
 
