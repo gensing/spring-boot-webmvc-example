@@ -18,9 +18,9 @@ public class RedisRepositoryConfig {
     }
 
     @Bean
-    public RedisTemplate<?, ?> redisTemplate(LettuceConnectionFactory connectionFactory) {
+    public RedisTemplate<?, ?> redisTemplate(RedisConnectionFactory redisConnectionFactory) {
         RedisTemplate<byte[], byte[]> redisTemplate = new RedisTemplate<>();
-        redisTemplate.setConnectionFactory(connectionFactory);
+        redisTemplate.setConnectionFactory(redisConnectionFactory);
         return redisTemplate;
     }
 }

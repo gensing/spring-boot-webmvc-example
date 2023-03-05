@@ -2,14 +2,17 @@ package com.tensing.boot.security.service;
 
 import com.tensing.boot.api.member.entity.Member;
 import com.tensing.boot.api.member.service.MemberService;
-import com.tensing.boot.common.module.TokenProvider;
+import com.tensing.boot.security.module.TokenProvider;
 import com.tensing.boot.exception.code.ErrorCode;
 import com.tensing.boot.exception.exception.BusinessException;
 import com.tensing.boot.security.code.RoleCode;
 import com.tensing.boot.security.payload.SecurityDto;
+import com.tensing.boot.security.repository.RefreshToken;
+import com.tensing.boot.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
@@ -28,26 +31,14 @@ public class SecurityServiceImpl implements SecurityService {
     private final MemberService memberService;
     private final TokenProvider accessTokenProvider;
     private final TokenProvider refreshTokenProvider;
-
+    private final RefreshTokenRepository refreshTokenRepository;
 
     // 인증
     @Override
     public SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest) {
-
-        final Member member = Optional.ofNullable(memberService.findMember(loginRequest.getUsername(), loginRequest.getPassword()))
-                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
-
-        final var descRoles = member.getRoles();
-        final var roles = descRoles != null ? descRoles.stream().map(i -> RoleCode.getByDesc(i.getDesc()).getRoleName()).toList() : null;
-
-        final Claims claims = Jwts.claims().setSubject("jwt");
-        claims.put("userId", member.getId());
-        claims.put("roles", roles); // List.of(RoleCode.USER.getRoleName())
-
-        return SecurityDto.TokenResponse.builder()
-                .accessToken(accessTokenProvider.generateToken(claims))
-                .refreshToken(refreshTokenProvider.generateToken(claims))
-                .build();
+        return loginRequest.getRefreshToken() == null
+                ? getToken(loginRequest.getUsername(), loginRequest.getPassword())
+                : getToken(loginRequest.getRefreshToken());
     }
 
     // 권한 정보 구하기
@@ -70,7 +61,7 @@ public class SecurityServiceImpl implements SecurityService {
         } catch (IllegalArgumentException ex) {
             log.info("JWT claims string is empty.");
             throw new BusinessException(ErrorCode.INVALID_JWT);
-        } catch (Exception e){
+        } catch (Exception e) {
             throw new BusinessException(ErrorCode.INVALID_JWT);
         }
 
@@ -85,5 +76,55 @@ public class SecurityServiceImpl implements SecurityService {
         final var auths = roles != null ? roles.stream().map(i -> new SimpleGrantedAuthority(String.valueOf(i))).toList() : null;
 
         return new UsernamePasswordAuthenticationToken(id, null, auths);
+    }
+
+
+    private SecurityDto.TokenResponse getToken(String username, String password) {
+
+        final Member member = Optional.ofNullable(memberService.findMember(username, password))
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+
+        final var descRoles = member.getRoles();
+        final var roles = descRoles != null ? descRoles.stream().map(i -> RoleCode.getByDesc(i.getDesc()).getRoleName()).toList() : null;
+
+        final Claims claim = Jwts.claims();
+        claim.put("userId", member.getId());
+        claim.put("roles", roles); // List.of(RoleCode.USER.getRoleName())
+
+        claim.setSubject("atk");
+        var atk = accessTokenProvider.generateToken(claim);
+
+        claim.setSubject("rtk");
+        var rtk = refreshTokenProvider.generateToken(claim);
+
+        // redis 에 refresh token 저장.
+        //refreshTokenRepository.deleteById(member.getId());
+        refreshTokenRepository.save(RefreshToken.builder().memberId(member.getId()).jwt(rtk).build());
+
+        return SecurityDto.TokenResponse.builder()
+                .accessToken(atk)
+                .refreshToken(rtk)
+                .build();
+    }
+
+    private SecurityDto.TokenResponse getToken(final String refreshToken) {
+
+        final var claim = refreshTokenProvider.decodeToken(refreshToken);
+
+        var userId = claim.get("userId", Long.class);
+
+        final var rtk = refreshTokenRepository.findById(userId)
+                .orElseThrow(() -> new AccessDeniedException("not found session"));
+
+        if (!refreshToken.equals(rtk.getJwt()))
+            throw new AccessDeniedException("invalid refreshToken");
+
+        claim.setSubject("atk");
+        final var atk = accessTokenProvider.generateToken(claim);
+
+        return SecurityDto.TokenResponse.builder()
+                .accessToken(atk)
+                .refreshToken(refreshToken)
+                .build();
     }
 }

@@ -13,7 +13,7 @@ public class SecurityController {
 
     private final SecurityService securityService;
 
-    @PostMapping("/auth")
+    @PostMapping("/tokens")
     @ResponseStatus(HttpStatus.CREATED)
     public SecurityDto.TokenResponse security(@RequestBody SecurityDto.TokenRequest tokenRequest) {
         return securityService.getToken(tokenRequest);
