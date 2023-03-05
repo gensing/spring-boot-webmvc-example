@@ -2,7 +2,7 @@ package com.tensing.boot.configuration;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.configuration.properties.TensingProperties;
-import com.tensing.boot.common.module.TokenProvider;
+import com.tensing.boot.security.module.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
