@@ -24,7 +24,7 @@ spring-doc:
     enabled: true
 logging:
   level:
-    root: INFO
+    root: debug #INFO
 tensing:
   jwt:
     tokenName: Authorization
