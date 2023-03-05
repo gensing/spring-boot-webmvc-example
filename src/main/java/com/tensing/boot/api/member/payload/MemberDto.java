@@ -1,5 +1,6 @@
 package com.tensing.boot.api.member.payload;
 
+import com.tensing.boot.api.member.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
@@ -24,6 +25,21 @@ public class MemberDto {
         @Email
         private String email;
 
+    }
+
+    @Builder
+    @Setter
+    @Getter
+    public static class MemberGetResponse {
+        private String username;
+        private String email;
+
+        public static MemberGetResponse of(Member member) {
+            return MemberGetResponse.builder()
+                    .username(member.getUsername())
+                    .email(member.getEmail())
+                    .build();
+        }
     }
 
     @Setter

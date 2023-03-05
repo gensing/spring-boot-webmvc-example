@@ -8,6 +8,7 @@ import com.tensing.boot.exception.exception.BusinessException;
 import com.tensing.boot.security.code.RoleCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -40,6 +41,13 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
+    public Member findMember(long sessionId, long memberId) {
+        if (sessionId != memberId) throw new AccessDeniedException("권한이 없습니다.");
+        return memberRepository.findById(memberId)
+                .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
+    }
+
+    @Override
     public Member findMember(String username, String password) {
         final var member = memberRepository.findByUsername(username);
         // 체크 필요
@@ -47,4 +55,6 @@ public class MemberServiceImpl implements MemberService {
                 ? member.get()
                 : null;
     }
+
+
 }
