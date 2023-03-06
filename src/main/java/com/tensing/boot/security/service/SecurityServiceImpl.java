@@ -10,8 +10,10 @@ import com.tensing.boot.security.payload.SecurityDto;
 import com.tensing.boot.security.repository.RefreshToken;
 import com.tensing.boot.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
+import jakarta.servlet.RequestDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -36,9 +38,10 @@ public class SecurityServiceImpl implements SecurityService {
     // 인증
     @Override
     public SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest) {
-        return loginRequest.getRefreshToken() == null
-                ? getToken(loginRequest.getUsername(), loginRequest.getPassword())
-                : getToken(loginRequest.getRefreshToken());
+        return switch (loginRequest.getGrantType()) {
+            case REFRESH_TOKEN -> getToken(loginRequest.getRefreshToken());
+            default -> getToken(loginRequest.getUsername(), loginRequest.getPassword());
+        };
     }
 
     // 권한 정보 구하기
