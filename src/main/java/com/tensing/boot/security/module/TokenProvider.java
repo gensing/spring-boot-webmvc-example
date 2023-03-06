@@ -22,13 +22,18 @@ public class TokenProvider {
 
     public String generateToken(Claims claims) {
 
-        Date now = new Date();
+        final var now = new Date();
+        final var end = new Date(now.getTime() + jwtExpirationInMs);
+
+        // 이곳에서 시간을 담아줘야 발급마다 시크릿 정보가 바뀜 ( claim 이 항상 달라지므로 )
+        claims.setIssuedAt(now);
+        claims.setExpiration(end);
 
         return Jwts.builder()
                 .setHeaderParam("type", "JWT")
                 .setHeaderParam("alg", signatureAlgorithm)
-                .setIssuedAt(now)
-                .setExpiration(new Date(now.getTime() + jwtExpirationInMs))
+                .setIssuedAt(now) // 이 필드 역할 확인 필요
+                .setExpiration(end) // 이 필드 역할 확인 필요
                 .setClaims(claims)
                 .signWith(signatureAlgorithm, key)
                 .compact();
