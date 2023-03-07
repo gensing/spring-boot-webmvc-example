@@ -26,11 +26,14 @@ logging:
   level:
     root: debug #INFO
 tensing:
-  jwt:
+  jwtAccessToken:
     tokenName: Authorization
     secretKey: Q4NSl604sgydJj1awEkR3ycUeR4uUAt7WJraD7EN3O9DVM4yyYuHxMEbSf4XXyYJkal13eqgB0F5Bqaa
     expirationInMs: 1296000000 # 1000 * 60 * 60 * 24 * 1
     signatureAlgorithm: HS512
-    refreshSecretKey: e3NSl604sgydJj1awEkR3ycUeR4uUet7WJraD7EN3O9aVM4yyYuHxMEbSf4XXyYJkal3seqgB0F5Bqaa
-    refreshExpirationInMs: 1296000000 # 1000 * 60 * 60 * 24 * 30
-    refreshSignatureAlgorithm: HS512
+  jwtRefreshToken:
+    tokenName: Authorization
+    secretKey: e3NSl604sgydJj1awEkR3ycUeR4uUet7WJraD7EN3O9aVM4yyYuHxMEbSf4XXyYJkal3seqgB0F5Bqaa
+    expirationInMs: 1296000000 # 1000 * 60 * 60 * 24 * 30
+    signatureAlgorithm: HS512
+

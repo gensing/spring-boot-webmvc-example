@@ -17,15 +17,15 @@ public class AppConfiguration {
 
     @Bean
     public TokenProvider accessTokenProvider() {
-        TensingProperties.JwtProperties jwt = tensingProperties.jwt();
+        TensingProperties.JwtProperties jwt = tensingProperties.jwtAccessToken();
         TokenProvider tokenProvider = new TokenProvider(jwt.secretKey(), jwt.signatureAlgorithm(), jwt.expirationInMs());
         return tokenProvider;
     }
 
     @Bean
     public TokenProvider refreshTokenProvider() {
-        TensingProperties.JwtProperties jwt = tensingProperties.jwt();
-        TokenProvider tokenProvider = new TokenProvider(jwt.refreshSecretKey(), jwt.refreshSignatureAlgorithm(), jwt.refreshExpirationInMs());
+        TensingProperties.JwtProperties jwt = tensingProperties.jwtRefreshToken();
+        TokenProvider tokenProvider = new TokenProvider(jwt.secretKey(), jwt.signatureAlgorithm(), jwt.expirationInMs());
         return tokenProvider;
     }
 

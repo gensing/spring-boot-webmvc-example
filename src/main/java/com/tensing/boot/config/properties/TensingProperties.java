@@ -6,16 +6,14 @@ import org.springframework.boot.context.properties.ConfigurationProperties;
 
 @ConfigurationProperties(prefix = "tensing")
 public record TensingProperties(
-        JwtProperties jwt
+        JwtProperties jwtAccessToken,
+        JwtProperties jwtRefreshToken
 ) {
     public record JwtProperties(
             String tokenName,
             String secretKey,
             int expirationInMs,
-            SignatureAlgorithm signatureAlgorithm,
-            String refreshSecretKey,
-            int refreshExpirationInMs,
-            SignatureAlgorithm refreshSignatureAlgorithm
+            SignatureAlgorithm signatureAlgorithm
     ) {
     }
 
