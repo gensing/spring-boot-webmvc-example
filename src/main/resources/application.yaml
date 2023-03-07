@@ -1,18 +1,13 @@
 server:
   port: 80
   shutdown: graceful # kill -15 시 안전하게 종료
-#server.servlet.context-path= /
 spring:
   profiles:
     active: local
   lifecycle:
     timeout-per-shutdown-phase: 30 # kill -15 시 30초 까지 기존 도는 프로세스를 기다려준다.
-  #mvc:
-    #throw-exception-if-no-handler-found: true
-    #dispatch-options-request: false
-  #web:
-    #resources:
-      #add-mappings: false
+  mvc:
+    static-path-pattern: /static/**
 logging:
   file: ./log
   charset:

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<body>
+
+roomId<input id="roomId"/> <button id="btnSub">sub</button>
+text:<input id="chatText"/> <button id="btnPub">send</button>
+<pre id="messages"></pre>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.4.0/sockjs.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+<script>
+
+    let client;
+    let subFlag = false;
+    let chatFlag = false;
+
+    document.querySelector("#btnSub").addEventListener("click", () => {
+        if(subFlag) return;
+        subFlag = true;
+        const roomId = document.querySelector("#roomId").value;
+        client = Stomp.over(new SockJS("/stomp"));
+        client.connect({},
+            () => {
+                client.subscribe(`/topic/room/${roomId}`, (payload) => {
+                    document.querySelector("#messages").appendChild(document.createTextNode(payload.body + "\n"));
+                });
+            },
+            (error) => {
+                console.error(error);
+            }
+        );
+    });
+
+    document.querySelector("#btnPub").addEventListener("click", () => {
+        if(chatFlag) return;
+        chatFlag = true;
+        const roomId = document.querySelector("#roomId").value;
+        const chatText = document.querySelector("#chatText").value;
+        client.send(`/pub/room/${roomId}`, {}, chatText);
+        chatFlag = false;
+    });
+</script>
+</body>
+</html>
