@@ -2,7 +2,7 @@ package com.tensing.boot.api.member;
 
 import com.tensing.boot.api.member.payload.MemberDto;
 import com.tensing.boot.api.member.service.MemberService;
-import com.tensing.boot.configuration.OpenApiConfiguration;
+import com.tensing.boot.config.OpenApiConfiguration;
 import com.tensing.boot.security.code.RoleCode;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;

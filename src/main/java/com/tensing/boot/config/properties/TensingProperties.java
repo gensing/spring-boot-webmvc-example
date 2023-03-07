@@ -1,4 +1,4 @@
-package com.tensing.boot.configuration.properties;
+package com.tensing.boot.config.properties;
 
 import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.boot.context.properties.ConfigurationProperties;

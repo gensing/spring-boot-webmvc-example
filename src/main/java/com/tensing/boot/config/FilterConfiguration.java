@@ -1,4 +1,4 @@
-package com.tensing.boot.configuration;
+package com.tensing.boot.config;
 
 import com.tensing.boot.common.filters.MDCLoggingFilter;
 import org.springframework.context.annotation.Bean;

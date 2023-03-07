@@ -1,6 +1,6 @@
 package com.tensing.boot;
 
-import com.tensing.boot.configuration.properties.TensingProperties;
+import com.tensing.boot.config.properties.TensingProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;

@@ -1,4 +1,4 @@
-package com.tensing.boot.configuration;
+package com.tensing.boot.config;
 
 import org.springframework.boot.autoconfigure.data.redis.RedisProperties;
 import org.springframework.context.annotation.Bean;
@@ -10,7 +10,7 @@ import org.springframework.data.redis.repository.configuration.EnableRedisReposi
 
 @Configuration
 @EnableRedisRepositories
-public class RedisRepositoryConfig {
+public class RedisConfiguration {
 
     @Bean
     public RedisConnectionFactory redisConnectionFactory(RedisProperties redisProperties) {

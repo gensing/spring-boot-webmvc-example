@@ -1,4 +1,4 @@
-package com.tensing.boot.configuration;
+package com.tensing.boot.config;
 
 import com.zaxxer.hikari.HikariDataSource;
 import jakarta.persistence.EntityManagerFactory;
