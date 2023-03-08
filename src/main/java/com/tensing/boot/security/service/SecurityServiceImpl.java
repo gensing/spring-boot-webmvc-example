@@ -76,6 +76,8 @@ public class SecurityServiceImpl implements SecurityService {
             throw new BusinessException(ErrorCode.INVALID_JWT);
         }
 
+        // 정보가 없으면 에러를 내자
+        
         final var auths = roles != null ? roles.stream().map(i -> new SimpleGrantedAuthority(String.valueOf(i))).toList() : null;
 
         return new UsernamePasswordAuthenticationToken(id, null, auths);

@@ -14,6 +14,8 @@ text:<input id="chatText"/> <button id="btnPub">send</button>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
 
+    const token = "Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJ1c2VySWQiOjEsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJzdWIiOiJhdGsiLCJpYXQiOjE2NzgyMDUwMzAsImV4cCI6MTY3OTUwMTAzMH0.6g2dPnOFY5V-jN8z5g_KHZgpmYICZfEaZfWN1H_y5nbOVDazK7cJ7BT1EX2k5ZwCMtv-lNlb-GawcfymuHmibA";
+
     let client;
     let subFlag = false;
     let chatFlag = false;
@@ -23,7 +25,7 @@ text:<input id="chatText"/> <button id="btnPub">send</button>
         subFlag = true;
         const roomId = document.querySelector("#roomId").value;
         client = Stomp.over(new SockJS("/stomp"));
-        client.connect({},
+        client.connect({Authorization:token},
             () => {
                 client.subscribe(`/topic/room/${roomId}`, (payload) => {
                     document.querySelector("#messages").appendChild(document.createTextNode(payload.body + "\n"));
@@ -43,6 +45,16 @@ text:<input id="chatText"/> <button id="btnPub">send</button>
         client.send(`/pub/room/${roomId}`, {}, chatText);
         chatFlag = false;
     });
+
+    function disconnect() {
+        if (client !== null) {
+            client.disconnect();
+        }
+    }
+
+    window.BeforeUnloadEvent = function(){
+        disconnect();
+    }
 </script>
 </body>
 </html>

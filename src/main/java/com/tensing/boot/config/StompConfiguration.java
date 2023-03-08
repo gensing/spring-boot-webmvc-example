@@ -1,44 +1,41 @@
 package com.tensing.boot.config;
 
+import com.tensing.boot.security.service.SecurityService;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.event.EventListener;
-import org.springframework.http.server.ServerHttpRequest;
-import org.springframework.http.server.ServerHttpResponse;
+import org.springframework.http.HttpHeaders;
 import org.springframework.messaging.Message;
 import org.springframework.messaging.MessageChannel;
+import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.simp.config.ChannelRegistration;
 import org.springframework.messaging.simp.config.MessageBrokerRegistry;
 import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.messaging.support.ChannelInterceptor;
-import org.springframework.web.socket.WebSocketHandler;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.util.StringUtils;
 import org.springframework.web.socket.config.annotation.EnableWebSocketMessageBroker;
 import org.springframework.web.socket.config.annotation.StompEndpointRegistry;
 import org.springframework.web.socket.config.annotation.WebSocketMessageBrokerConfigurer;
 import org.springframework.web.socket.config.annotation.WebSocketTransportRegistration;
-import org.springframework.web.socket.messaging.SessionConnectEvent;
-import org.springframework.web.socket.messaging.SessionDisconnectEvent;
-import org.springframework.web.socket.messaging.SessionSubscribeEvent;
-import org.springframework.web.socket.messaging.SessionUnsubscribeEvent;
-import org.springframework.web.socket.server.HandshakeInterceptor;
-
-import java.util.Map;
 
 @Slf4j
+@RequiredArgsConstructor
 @Configuration
 @EnableWebSocketMessageBroker
-public class StompConfiguration implements WebSocketMessageBrokerConfigurer, ChannelInterceptor, HandshakeInterceptor {
+public class StompConfiguration implements WebSocketMessageBrokerConfigurer, ChannelInterceptor {
 
     // STOMP : Simple Text Oriented Messaging Protocol
-    
+
     // HandshakeInterceptor 연결 때 한 번 수행 (  )
-    // ChannelInterceptor 연결 빼고 계속 수행
+    // ChannelInterceptor 연결 빼고 계속 수행, frame 접근 가능 ( jwt 를 이곳에서 가져올 수 있음 )
+
+    private final SecurityService securityService;
 
     @Override
     public void registerStompEndpoints(StompEndpointRegistry registry) {
         registry.addEndpoint("/stomp")  // 소켓 연결시 사용
                 .setAllowedOriginPatterns("*")
-                .addInterceptors(this)
                 .withSockJS();
     }
 
@@ -61,49 +58,27 @@ public class StompConfiguration implements WebSocketMessageBrokerConfigurer, Cha
     }
 
     @Override
-    public boolean beforeHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Map<String, Object> attributes) throws Exception {
-        log.info("beforeHandshake");
-        return true;
-    }
-
-    @Override
-    public void afterHandshake(ServerHttpRequest request, ServerHttpResponse response, WebSocketHandler wsHandler, Exception exception) {
-        log.info("afterHandshake");
-    }
-
-    @Override
     public Message<?> preSend(Message<?> message, MessageChannel channel) {
-        StompHeaderAccessor accessor = StompHeaderAccessor.wrap(message);
+
         log.info("preSend");
+
+        final var accessor = StompHeaderAccessor.wrap(message);
+        // var nowDestination = accessor.getNativeHeader("destination").get(0); // 구독 정보
+
+        switch (accessor.getCommand()) {
+            case CONNECT -> {
+                final var bearerToken = accessor.getFirstNativeHeader(HttpHeaders.AUTHORIZATION);
+                final var accessToken = (StringUtils.hasText(bearerToken) && bearerToken.startsWith("Bearer ")) ? bearerToken.substring(7) : null;
+                final var authentication = securityService.getAuthentication(accessToken);
+            }
+        }
+
         return message;
     }
+
     @Override
     public void postSend(Message<?> message, MessageChannel channel, boolean sent) {
         log.info("postSend");
     }
 
-    @EventListener
-    public void onConnect(SessionConnectEvent event) {
-        log.info("onConnect");
-    }
-
-    @EventListener
-    public void onSubscribe(SessionSubscribeEvent event) {
-        log.info("onSubscribe");
-        // 이곳에서 권한 인증 추가
-        // var accessor = StompHeaderAccessor.wrap(event.getMessage());
-        //var nowDestination = accessor.getNativeHeader("destination").get(0);
-        // if (!nowDestination.startsWith(destination)) return;
-        //messagingTemplate.convertAndSend(nowDestination, "subscribe " + nowDestination);
-    }
-
-    @EventListener
-    public void onUnsubscribe(SessionUnsubscribeEvent event) {
-        log.info("onUnsubscribe");
-    }
-
-    @EventListener
-    public void onDisconnect(SessionDisconnectEvent event) {
-        log.info("onDisconnect");
-    }
 }
