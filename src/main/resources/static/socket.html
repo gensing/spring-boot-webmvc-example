@@ -6,7 +6,6 @@
 </head>
 <body>
 
-roomId<input id="roomId"/> <button id="btnSub">sub</button>
 text:<input id="chatText"/> <button id="btnPub">send</button>
 <pre id="messages"></pre>
 
@@ -14,20 +13,18 @@ text:<input id="chatText"/> <button id="btnPub">send</button>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
 <script>
 
-    const token = "Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJ1c2VySWQiOjEsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJzdWIiOiJhdGsiLCJpYXQiOjE2NzgyMDUwMzAsImV4cCI6MTY3OTUwMTAzMH0.6g2dPnOFY5V-jN8z5g_KHZgpmYICZfEaZfWN1H_y5nbOVDazK7cJ7BT1EX2k5ZwCMtv-lNlb-GawcfymuHmibA";
+    window.onload = function(){ subscribe() };
+    window.BeforeUnloadEvent = function(){ disconnect(); };
+    document.querySelector("#btnPub").addEventListener("click", () => { sendMessage(); });
 
     let client;
-    let subFlag = false;
-    let chatFlag = false;
 
-    document.querySelector("#btnSub").addEventListener("click", () => {
-        if(subFlag) return;
-        subFlag = true;
-        const roomId = document.querySelector("#roomId").value;
+    function subscribe(){
+        const token = "Bearer eyJ0eXBlIjoiSldUIiwiYWxnIjoiSFM1MTIifQ.eyJ1c2VySWQiOjEsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJzdWIiOiJhdGsiLCJpYXQiOjE2NzgyMDUwMzAsImV4cCI6MTY3OTUwMTAzMH0.6g2dPnOFY5V-jN8z5g_KHZgpmYICZfEaZfWN1H_y5nbOVDazK7cJ7BT1EX2k5ZwCMtv-lNlb-GawcfymuHmibA";
         client = Stomp.over(new SockJS("/stomp"));
         client.connect({Authorization:token},
             () => {
-                client.subscribe(`/topic/room/${roomId}`, (payload) => {
+                client.subscribe(`/topic/chat`, (payload) => {
                     document.querySelector("#messages").appendChild(document.createTextNode(payload.body + "\n"));
                 });
             },
@@ -35,16 +32,7 @@ text:<input id="chatText"/> <button id="btnPub">send</button>
                 console.error(error);
             }
         );
-    });
-
-    document.querySelector("#btnPub").addEventListener("click", () => {
-        if(chatFlag) return;
-        chatFlag = true;
-        const roomId = document.querySelector("#roomId").value;
-        const chatText = document.querySelector("#chatText").value;
-        client.send(`/pub/room/${roomId}`, {}, chatText);
-        chatFlag = false;
-    });
+    }
 
     function disconnect() {
         if (client !== null) {
@@ -52,9 +40,11 @@ text:<input id="chatText"/> <button id="btnPub">send</button>
         }
     }
 
-    window.BeforeUnloadEvent = function(){
-        disconnect();
+    function sendMessage() {
+        const chatText = document.querySelector("#chatText").value;
+        client.send(`/pub/chat`, {}, chatText);
     }
+
 </script>
 </body>
 </html>
