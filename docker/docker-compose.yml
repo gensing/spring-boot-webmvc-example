@@ -16,8 +16,8 @@ services:
       MYSQL_PASSWORD: boot
     restart: always
   zookeeper:
-    image: zookeeper:latest
-    restart: unless-stopped
+    image: confluentinc/cp-zookeeper:latest
+    container_name: zookeeper
     ports:
       - 21812:2181
     environment:
@@ -26,16 +26,13 @@ services:
       ZOOKEEPER_TICK_TIME: 2000
       ZOOKEEPER_INIT_LIMIT: 5
       ZOOKEEPER_SYNC_LIMIT: 2
-    volumes:
-      - ./zookeeper/data:/data
-      - ./zookeeper/data:/datalog
   kafka:
     image: confluentinc/cp-kafka:latest
-    restart: unless-stopped
+    container_name: kafka
     depends_on:
       - zookeeper
     ports:
-      - 9093:9092
+      - 9093:9093
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
@@ -43,6 +40,9 @@ services:
       KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
       KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:9092,PLAINTEXT_HOST://localhost:9093
       KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: true # 실제 환경에서는 사용하지 말고, 직접 생성하시오?
     volumes:
       - ./kafka/data:/var/lib/kafka/data
   redis:
