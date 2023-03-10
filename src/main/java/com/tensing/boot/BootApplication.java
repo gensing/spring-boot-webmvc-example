@@ -1,6 +1,6 @@
 package com.tensing.boot;
 
-import com.tensing.boot.config.properties.TensingProperties;
+import com.tensing.boot.config.properties.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.boot.ApplicationArguments;
@@ -17,7 +17,7 @@ import org.springframework.web.servlet.DispatcherServlet;
 @SpringBootApplication
 public class BootApplication implements ApplicationRunner {
 
-    private final TensingProperties tensingProperties;
+    private final JwtProperties tensingProperties;
 
     public static void main(String[] args) {
         ApplicationContext ctx = SpringApplication.run(BootApplication.class, args);

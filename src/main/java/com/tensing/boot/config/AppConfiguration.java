@@ -1,7 +1,7 @@
 package com.tensing.boot.config;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tensing.boot.config.properties.TensingProperties;
+import com.tensing.boot.config.properties.JwtProperties;
 import com.tensing.boot.security.module.TokenProvider;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -13,18 +13,18 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 @Configuration
 public class AppConfiguration {
 
-    private final TensingProperties tensingProperties;
+    private final JwtProperties tensingProperties;
 
     @Bean
     public TokenProvider accessTokenProvider() {
-        TensingProperties.JwtProperties jwt = tensingProperties.jwtAccessToken();
+        JwtProperties.TokenProperties jwt = tensingProperties.accessToken();
         TokenProvider tokenProvider = new TokenProvider(jwt.secretKey(), jwt.signatureAlgorithm(), jwt.expirationInMs());
         return tokenProvider;
     }
 
     @Bean
     public TokenProvider refreshTokenProvider() {
-        TensingProperties.JwtProperties jwt = tensingProperties.jwtRefreshToken();
+        JwtProperties.TokenProperties jwt = tensingProperties.refreshToken();
         TokenProvider tokenProvider = new TokenProvider(jwt.secretKey(), jwt.signatureAlgorithm(), jwt.expirationInMs());
         return tokenProvider;
     }

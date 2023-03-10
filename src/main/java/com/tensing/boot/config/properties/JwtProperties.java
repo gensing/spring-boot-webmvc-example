@@ -4,12 +4,12 @@ import io.jsonwebtoken.SignatureAlgorithm;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 
 
-@ConfigurationProperties(prefix = "tensing")
-public record TensingProperties(
-        JwtProperties jwtAccessToken,
-        JwtProperties jwtRefreshToken
+@ConfigurationProperties(prefix = "tensing.jwt")
+public record JwtProperties(
+        TokenProperties accessToken,
+        TokenProperties refreshToken
 ) {
-    public record JwtProperties(
+    public record TokenProperties(
             String tokenName,
             String secretKey,
             int expirationInMs,
