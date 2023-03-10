@@ -27,6 +27,8 @@ spring-doc:
 logging:
   level:
     root: debug #INFO
+
+
 tensing:
   jwtAccessToken:
     tokenName: Authorization
@@ -38,4 +40,5 @@ tensing:
     secretKey: e3NSl604sgydJj1awEkR3ycUeR4uUet7WJraD7EN3O9aVM4yyYuHxMEbSf4XXyYJkal3seqgB0F5Bqaa
     expirationInMs: 1296000000 # 1000 * 60 * 60 * 24 * 30
     signatureAlgorithm: HS512
-
+  elasticsearch:
+    servers: localhost:9200
