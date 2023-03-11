@@ -45,7 +45,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
 
     // 사전에 미리 정의한 편리한 의존성 조합을 제공 ( 최적화 버전 맞춤 )
-    implementation 'org.springframework.boot:spring-boot-starter-parent'
+    //implementation 'org.springframework.boot:spring-boot-starter-parent'
 
     // swagger dependency ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
