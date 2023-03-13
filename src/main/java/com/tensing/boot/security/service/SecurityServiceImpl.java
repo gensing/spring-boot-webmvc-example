@@ -6,18 +6,17 @@ import com.tensing.boot.security.module.TokenProvider;
 import com.tensing.boot.exception.code.ErrorCode;
 import com.tensing.boot.exception.exception.BusinessException;
 import com.tensing.boot.security.code.RoleCode;
-import com.tensing.boot.security.payload.SecurityDto;
+import com.tensing.boot.security.dto.SecurityDto;
 import com.tensing.boot.security.repository.RefreshToken;
 import com.tensing.boot.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
-import jakarta.servlet.RequestDispatcher;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -25,7 +24,6 @@ import java.util.List;
 import java.util.Optional;
 
 @Transactional
-@Service
 @Slf4j
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
@@ -68,6 +66,7 @@ public class SecurityServiceImpl implements SecurityService {
             throw new BusinessException(ErrorCode.INVALID_JWT);
         }
 
+        // 정보가 없으면 에러를 내자
         final var id = claims.get("userId", Long.class);
         final var roles = claims.get("roles", List.class);
 
@@ -76,11 +75,9 @@ public class SecurityServiceImpl implements SecurityService {
             throw new BusinessException(ErrorCode.INVALID_JWT);
         }
 
-        // 정보가 없으면 에러를 내자
-        
+        final var userInfo = SecurityDto.UserInfo.builder().id(id).build();
         final var auths = roles != null ? roles.stream().map(i -> new SimpleGrantedAuthority(String.valueOf(i))).toList() : null;
-
-        return new UsernamePasswordAuthenticationToken(id, null, auths);
+        return new UsernamePasswordAuthenticationToken(userInfo, null, auths);
     }
 
 

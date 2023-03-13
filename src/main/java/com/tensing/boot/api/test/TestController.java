@@ -2,6 +2,7 @@ package com.tensing.boot.api.member.base;
 
 import com.tensing.boot.config.OpenApiConfiguration;
 import com.tensing.boot.security.code.RoleCode;
+import com.tensing.boot.security.dto.SecurityDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -20,7 +21,7 @@ public class TestController {
     @Secured(value = RoleCode.USER_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
-    public String security(@AuthenticationPrincipal long userId) {
-        return "security userId: " + userId;
+    public String security(@AuthenticationPrincipal SecurityDto.UserInfo userInfo) {
+        return "security userId: " + userInfo.getId();
     }
 }

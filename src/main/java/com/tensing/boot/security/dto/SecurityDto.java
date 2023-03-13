@@ -1,12 +1,8 @@
-package com.tensing.boot.security.payload;
+package com.tensing.boot.security.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import com.tensing.boot.security.code.RoleCode;
 import io.swagger.v3.oas.annotations.media.Schema;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.RequiredArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -47,6 +43,12 @@ public class SecurityDto {
     public static class TokenResponse {
         private String accessToken;
         private String refreshToken;
+    }
+
+    @Getter
+    @Builder
+    public static class UserInfo {
+        private long id;
     }
 
 }

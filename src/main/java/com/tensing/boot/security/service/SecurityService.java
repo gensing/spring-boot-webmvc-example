@@ -1,6 +1,6 @@
 package com.tensing.boot.security.service;
 
-import com.tensing.boot.security.payload.SecurityDto;
+import com.tensing.boot.security.dto.SecurityDto;
 import org.springframework.security.core.Authentication;
 
 public interface SecurityService {

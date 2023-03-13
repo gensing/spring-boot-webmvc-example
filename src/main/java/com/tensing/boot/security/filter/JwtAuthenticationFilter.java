@@ -1,7 +1,7 @@
 package com.tensing.boot.security.filter;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tensing.boot.security.payload.SecurityDto;
+import com.tensing.boot.security.dto.SecurityDto;
 import com.tensing.boot.security.service.SecurityService;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.http.HttpServletRequest;

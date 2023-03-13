@@ -1,6 +1,6 @@
 package com.tensing.boot.security.controller;
 
-import com.tensing.boot.security.payload.SecurityDto;
+import com.tensing.boot.security.dto.SecurityDto;
 import com.tensing.boot.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
