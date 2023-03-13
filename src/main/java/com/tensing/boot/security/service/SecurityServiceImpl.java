@@ -25,6 +25,7 @@ import java.util.Optional;
 
 @Transactional
 @Slf4j
+@Service
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
 
