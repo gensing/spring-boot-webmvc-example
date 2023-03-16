@@ -8,20 +8,70 @@ services:
       - 3306:3306
     volumes:
       - ./mariadb/conf.d:/etc/mysql/conf.d
-      - ./mariadb/data:/var/lib/mysql
       - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
+      - ./../docker-data/mariadb/data:/var/lib/mysql
     environment:
       TZ: Asia/Seoul
       MYSQL_ROOT_PASSWORD: 1234
       MYSQL_DATABASE: boot
       MYSQL_USER: boot
       MYSQL_PASSWORD: boot
+    networks:
+      - es-bridge
   redis:
     image: redis:alpine
     container_name: redis
     command: redis-server --port 6379
     ports:
       - 6379:6379
+  es:
+    build:
+      context: ./es/
+      args:
+        ELK_VERSION: 7.15.2
+    container_name: es
+    environment:
+      - node.name=single-node
+      - cluster.name=boot
+      - discovery.type=single-node
+    ports:
+      - 9200:9200
+      - 9300:9300
+    networks:
+      - es-bridge
+  logstash:
+    build:
+      context: ./logstash/
+      args:
+        ELK_VERSION: 7.15.2
+    container_name: logstash
+    volumes:
+      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      - ./logstash/config/pipeline.yml:/usr/share/logstash/config/pipeline.yml
+      - ./logstash/pipeline:/usr/share/logstash/pipeline
+      - ./logstash/jars:/usr/share/logstash/jars
+    ports:
+      - "5000:5000/tcp"
+      - "5000:5000/udp"
+      - "9600:9600"
+#    environment:
+#      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
+    networks:
+      - es-bridge
+    depends_on:
+      - es
+  kibana:
+    container_name: kibana
+    image: docker.elastic.co/kibana/kibana:7.15.2
+    environment:
+      SERVER_NAME: kibana
+      ELASTICSEARCH_HOSTS: http://es:9200
+    ports:
+      - 5601:5601
+    networks:
+      - es-bridge
+    depends_on:
+      - es
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
@@ -51,34 +101,7 @@ services:
       KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true # 실제 환경에서는 사용하지 말고, 직접 생성하시오?
     volumes:
-      - ./kafka/data:/var/lib/kafka/data
-  es:
-    build:
-      context: ./es/
-      args:
-        ELK_VERSION: 7.15.2
-    container_name: es
-    environment:
-      - node.name=single-node
-      - cluster.name=boot
-      - discovery.type=single-node
-    ports:
-      - 9200:9200
-      - 9300:9300
-    networks:
-      - es-bridge
-  kibana:
-    container_name: kibana
-    image: docker.elastic.co/kibana/kibana:7.15.2
-    environment:
-      SERVER_NAME: kibana
-      ELASTICSEARCH_HOSTS: http://es:9200
-    ports:
-      - 5601:5601
-    depends_on:
-      - es
-    networks:
-      - es-bridge
+      - ./../docker-data/kafka/data:/var/lib/kafka/data
 
 networks:
   es-bridge:

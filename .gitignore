@@ -36,6 +36,7 @@ out/
 
 ### VS Code ###
 .vscode/
+docker-data
 docker/**
-!docker/docker-compose.yml
-!docker/es/Dockerfile
+#!docker/docker-compose.yml
+#!docker/es/Dockerfile
