@@ -54,8 +54,8 @@ dependencies {
     // kafka dependency
     implementation 'org.springframework.kafka:spring-kafka'
 
-    // mysql dependency
-    runtimeOnly 'com.mysql:mysql-connector-j:8.0.32'
+    // mariadb dependency
+    implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
 
     // jwt dependency
     implementation 'io.jsonwebtoken:jjwt-api:0.11.5'
