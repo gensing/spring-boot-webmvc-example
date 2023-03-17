@@ -46,7 +46,7 @@ services:
         ELK_VERSION: 7.15.2
     container_name: logstash
     volumes:
-      - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
+      # - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/config/pipeline.yml:/usr/share/logstash/config/pipeline.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
       - ./logstash/jars:/usr/share/logstash/jars
