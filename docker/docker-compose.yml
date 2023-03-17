@@ -86,8 +86,6 @@ services:
   kafka:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
-    depends_on:
-      - zookeeper
     ports:
       - 9093:9093
     environment:
@@ -102,6 +100,8 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: true # 실제 환경에서는 사용하지 말고, 직접 생성하시오?
     volumes:
       - ./../docker-data/kafka/data:/var/lib/kafka/data
+    depends_on:
+      - zookeeper
 
 networks:
   es-bridge:
