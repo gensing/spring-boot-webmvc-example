@@ -1,4 +1,4 @@
-package com.tensing.boot.api.member;
+package com.tensing.boot.api.member.controller;
 
 import com.tensing.boot.api.member.payload.MemberDto;
 import com.tensing.boot.api.member.service.MemberService;
