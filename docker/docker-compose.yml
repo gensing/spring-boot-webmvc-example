@@ -24,19 +24,32 @@ services:
     command: redis-server --port 6379
     ports:
       - 6379:6379
-  es:
+  elasticsearch:
     build:
-      context: ./es/
+      context: ./elasticsearch/
       args:
         ELK_VERSION: 7.15.2
-    container_name: es
+    container_name: elasticsearch
     environment:
       - node.name=single-node
       - cluster.name=boot
       - discovery.type=single-node
+      - action.auto_create_index=false
+      - path.data=/usr/share/elasticsearch/data
+      - path.logs=/usr/share/elasticsearch/logs
+      - http.port=9200
+      - transport.port=9300
+      - transport.compress=true
+      - network.host=0.0.0.0
+      - http.cors.enabled=false
+      - http.cors.allow-origin=/https?:\/\/localhost(:[0-9]+)?/
     ports:
       - 9200:9200
       - 9300:9300
+    volumes:
+      #- ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
+      - ./../docker-data/elasticsearch/data:/usr/share/elasticsearch/data
+      - ./../docker-data/elasticsearch/log:/usr/share/elasticsearch/log
     networks:
       - es-bridge
   logstash:
@@ -45,33 +58,34 @@ services:
       args:
         ELK_VERSION: 7.15.2
     container_name: logstash
+    environment:
+      SERVER_NAME: logstash
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     volumes:
-      # - ./logstash/config/logstash.yml:/usr/share/logstash/config/logstash.yml
       - ./logstash/config/pipeline.yml:/usr/share/logstash/config/pipeline.yml
       - ./logstash/pipeline:/usr/share/logstash/pipeline
       - ./logstash/jars:/usr/share/logstash/jars
+      - ./logstash/dat:/usr/share/logstash/dat
     ports:
       - "5000:5000/tcp"
       - "5000:5000/udp"
       - "9600:9600"
-#    environment:
-#      LS_JAVA_OPTS: "-Xmx256m -Xms256m"
     networks:
       - es-bridge
     depends_on:
-      - es
+      - elasticsearch
   kibana:
     container_name: kibana
     image: docker.elastic.co/kibana/kibana:7.15.2
     environment:
       SERVER_NAME: kibana
-      ELASTICSEARCH_HOSTS: http://es:9200
+      ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
       - 5601:5601
     networks:
       - es-bridge
     depends_on:
-      - es
+      - elasticsearch
   zookeeper:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
