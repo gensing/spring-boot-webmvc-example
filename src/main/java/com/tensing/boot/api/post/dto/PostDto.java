@@ -49,7 +49,7 @@ public class PostDto {
                     .title(post.getTitle())
                     .body(post.getBody())
                     .writeDate(post.getCreatedDate())
-                    .updateDate(post.getLastModifiedDate())
+                    .updateDate(post.getUpdatedDate())
                     .build();
         }
     }
