@@ -1,6 +1,7 @@
 package com.tensing.boot.api.search.document;
 
 import lombok.*;
+import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.LocalDateTime;
@@ -14,6 +15,7 @@ import java.time.LocalDateTime;
 @Setting(settingPath = "elastic/search-setting.json")
 public class SearchDocument {
 
+    @Id
     @Field(value = "id", type = FieldType.Integer)
     private Long id;
 
