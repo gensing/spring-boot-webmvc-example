@@ -14,18 +14,18 @@ import java.time.LocalDateTime;
 @Setting(settingPath = "elastic/search-setting.json")
 public class SearchDocument {
 
-    @Field(type = FieldType.Integer)
+    @Field(value = "id", type = FieldType.Integer)
     private Long id;
 
-    @Field(type = FieldType.Text, analyzer = "korean_analyzer")
+    @Field(value = "title", type = FieldType.Text, analyzer = "korean_analyzer")
     private String title;
 
-    @Field(type = FieldType.Text, analyzer = "korean_analyzer")
+    @Field(value = "description", type = FieldType.Text, analyzer = "korean_analyzer")
     private String description;
 
-    @Field(type = FieldType.Date)
+    @Field(value = "created_at", type = FieldType.Date)
     private LocalDateTime createdAt;
 
-    @Field(type = FieldType.Date)
+    @Field(value = "updated_at", type = FieldType.Date)
     private LocalDateTime updatedAt;
 }
