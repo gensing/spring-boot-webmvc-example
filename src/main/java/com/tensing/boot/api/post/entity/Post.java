@@ -9,7 +9,7 @@ import lombok.*;
 import static jakarta.persistence.FetchType.LAZY;
 
 @Entity
-@Table(name = "Post")
+@Table(name = "post")
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
@@ -24,10 +24,10 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "member_id", updatable = false)
     private Member member;
 
-    @Column(name = "username", unique = true, nullable = false)
+    @Column(name = "title", nullable = false)
     private String title;
 
-    @Column(name = "email", unique = true, nullable = false)
+    @Column(name = "body", nullable = false)
     private String body;
 
 }
