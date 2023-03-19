@@ -1,8 +1,8 @@
-package com.tensing.boot.api.search.reopsitory;
+package com.tensing.boot.api.search.dao;
 
 import com.tensing.boot.api.search.document.SearchDocument;
 import com.tensing.boot.api.search.dto.SearchCondition;
-import com.tensing.boot.exception.code.ErrorCode;
+import com.tensing.boot.api.search.dao.SearchDao;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -13,7 +13,7 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class EsSearchQueryRepositoryImpl implements EsSearchQueryRepository {
+public class SearchDaoImpl implements SearchDao {
 
     // CriteriaQuery, StringQuery, NativeSearchQuery
     private final ElasticsearchOperations operations;

@@ -6,6 +6,6 @@ import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
-public interface EsSearchService {
+public interface SearchService {
     List<SearchDocument> search(SearchCondition searchCondition, Pageable pageable);
 }
