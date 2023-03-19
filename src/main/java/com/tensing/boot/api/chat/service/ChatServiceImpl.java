@@ -1,4 +1,4 @@
-package com.tensing.boot.api.chat;
+package com.tensing.boot.api.chat.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;

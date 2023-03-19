@@ -1,5 +1,6 @@
-package com.tensing.boot.api.chat;
+package com.tensing.boot.api.chat.socket;
 
+import com.tensing.boot.api.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.exception.ExceptionUtils;
@@ -9,14 +10,12 @@ import org.springframework.messaging.handler.annotation.Headers;
 import org.springframework.messaging.handler.annotation.MessageExceptionHandler;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
-import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 @Slf4j
 @RequiredArgsConstructor
-@RequestMapping("/api")
 @RestController
-public class ChatController {
+public class ChatSocket {
 
     private final ChatService chatService;
     private final String BROKER_CHAT_TOPIC = "chat-topic";
