@@ -8,6 +8,12 @@ group = 'com.tensing'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
 
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
 repositories {
     mavenCentral()
 }
@@ -47,7 +53,7 @@ dependencies {
     // 사전에 미리 정의한 편리한 의존성 조합을 제공 ( 최적화 버전 맞춤 )
     //implementation 'org.springframework.boot:spring-boot-starter-parent'
 
-    // swagger dependency ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
+    // swagger dependencies ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
     implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.2'
 
@@ -62,13 +68,19 @@ dependencies {
     runtimeOnly 'io.jsonwebtoken:jjwt-impl:0.11.5'
     runtimeOnly 'io.jsonwebtoken:jjwt-jackson:0.11.5'
 
+    // Querydsl dependencies
+    implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
+    annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"  // compile 시 @Entity 찾아 QClass 을 생성해 주는 라이브러리, compileJava 실행해서 생성
+    annotationProcessor "jakarta.annotation:jakarta.annotation-api"
+    annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
     // test database dependency
     runtimeOnly 'com.h2database:h2:2.1.214'
 
     // test redis dependency
     testImplementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
 
-    // lombok dependency
+    // lombok dependencies
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     testCompileOnly 'org.projectlombok:lombok'
@@ -78,3 +90,4 @@ dependencies {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
