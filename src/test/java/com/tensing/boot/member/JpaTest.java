@@ -1,7 +1,7 @@
 package com.tensing.boot.member;
 
 import com.tensing.boot.api.member.entity.Member;
-import com.tensing.boot.api.member.repository.MemberRepository;
+import com.tensing.boot.api.member.dao.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;

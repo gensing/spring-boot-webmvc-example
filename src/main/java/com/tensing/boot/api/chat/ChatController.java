@@ -27,16 +27,16 @@ public class ChatController {
         chatService.convertAndSendToMessageBroker(BROKER_CHAT_TOPIC, chatMessage);
     }
 
-    @KafkaListener(topics = BROKER_CHAT_TOPIC, id = "chat-listener")
-    public void receiveMessage(@Headers MessageHeaders headers, @Payload String payload) {
-        chatService.convertAndSendToClient("/topic/chat", payload);
-    }
-
     @MessageExceptionHandler
     public String handleException(Throwable exception) {
         log.info("handleException");
         log.info(ExceptionUtils.getStackTrace(exception));
         return exception.getMessage();
+    }
+
+    @KafkaListener(topics = BROKER_CHAT_TOPIC, id = "chat-listener")
+    public void receiveMessage(@Headers MessageHeaders headers, @Payload String payload) {
+        chatService.convertAndSendToClient("/topic/chat", payload);
     }
 
 }

@@ -1,7 +1,7 @@
 package com.tensing.boot.api.post.entity;
 
 import com.tensing.boot.api.member.entity.Member;
-import com.tensing.boot.common.entity.BaseEntity;
+import com.tensing.boot.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 

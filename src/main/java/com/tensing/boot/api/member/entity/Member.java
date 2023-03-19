@@ -1,8 +1,8 @@
 package com.tensing.boot.api.member.entity;
 
-import com.tensing.boot.common.entity.BaseEntity;
-import com.tensing.boot.security.code.RoleCode;
-import com.tensing.boot.security.code.RoleConverter;
+import com.tensing.boot.global.common.entity.BaseEntity;
+import com.tensing.boot.global.security.code.RoleCode;
+import com.tensing.boot.global.security.code.RoleConverter;
 import jakarta.persistence.*;
 import lombok.*;
 

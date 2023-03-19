@@ -1,7 +1,7 @@
 package com.tensing.boot.api.member.service;
 
 import com.tensing.boot.api.member.entity.Member;
-import com.tensing.boot.api.member.payload.MemberDto;
+import com.tensing.boot.api.member.dto.MemberDto;
 
 public interface MemberService {
     long createMember(MemberDto.MemberRequest postRequest);

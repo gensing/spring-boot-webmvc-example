@@ -1,11 +1,11 @@
 package com.tensing.boot.api.member.service;
 
 import com.tensing.boot.api.member.entity.Member;
-import com.tensing.boot.api.member.payload.MemberDto;
-import com.tensing.boot.api.member.repository.MemberRepository;
-import com.tensing.boot.exception.code.ErrorCode;
-import com.tensing.boot.exception.exception.BusinessException;
-import com.tensing.boot.security.code.RoleCode;
+import com.tensing.boot.api.member.dto.MemberDto;
+import com.tensing.boot.api.member.dao.MemberRepository;
+import com.tensing.boot.global.exception.code.ErrorCode;
+import com.tensing.boot.global.exception.exception.BusinessException;
+import com.tensing.boot.global.security.code.RoleCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.security.access.AccessDeniedException;

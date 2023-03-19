@@ -2,10 +2,10 @@ package com.tensing.boot.api.post.service;
 
 import com.tensing.boot.api.post.dto.PostDto;
 import com.tensing.boot.api.post.entity.Post;
-import com.tensing.boot.api.post.repository.PostRepository;
-import com.tensing.boot.exception.code.ErrorCode;
-import com.tensing.boot.exception.exception.BusinessException;
-import com.tensing.boot.security.dto.SecurityDto;
+import com.tensing.boot.api.post.dao.PostRepository;
+import com.tensing.boot.global.exception.code.ErrorCode;
+import com.tensing.boot.global.exception.exception.BusinessException;
+import com.tensing.boot.global.security.dto.SecurityDto;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 

@@ -1,10 +1,10 @@
 package com.tensing.boot.api.member.controller;
 
-import com.tensing.boot.api.member.payload.MemberDto;
+import com.tensing.boot.api.member.dto.MemberDto;
 import com.tensing.boot.api.member.service.MemberService;
-import com.tensing.boot.config.OpenApiConfiguration;
-import com.tensing.boot.security.code.RoleCode;
-import com.tensing.boot.security.dto.SecurityDto;
+import com.tensing.boot.global.config.OpenApiConfiguration;
+import com.tensing.boot.global.security.code.RoleCode;
+import com.tensing.boot.global.security.dto.SecurityDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -34,8 +34,6 @@ public class MemberController {
     @Secured(value = RoleCode.USER_VALUE)
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public MemberDto.MemberGetResponse getMember(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long memberId) {
-        // @AuthenticationPrincipal 객체를 class type 으로 받아오도록 수정 필요.
-        // 현재는 권한 자체가 없을시 @Secured 보다 먼저  @AuthenticationPrincipal 가 long type 에 null 을 리턴하여 @Secured 처리전 500 에러 발생
         final var member = memberService.findMember(sessionInfo.getId(), memberId);
         return MemberDto.MemberGetResponse.of(member);
     }

@@ -1,0 +1,13 @@
+package com.tensing.boot.global.security.service;
+
+import com.tensing.boot.global.security.dto.SecurityDto;
+import org.springframework.security.core.Authentication;
+
+public interface SecurityService {
+
+    // 발급
+    SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest);
+
+    // 검증
+    Authentication getAuthentication(String accessToken);
+}

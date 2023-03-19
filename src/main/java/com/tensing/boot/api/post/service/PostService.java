@@ -1,7 +1,7 @@
 package com.tensing.boot.api.post.service;
 
 import com.tensing.boot.api.post.dto.PostDto;
-import com.tensing.boot.security.dto.SecurityDto;
+import com.tensing.boot.global.security.dto.SecurityDto;
 
 import java.util.List;
 

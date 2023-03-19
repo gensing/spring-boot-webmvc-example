@@ -2,9 +2,9 @@ package com.tensing.boot.api.post.controller;
 
 import com.tensing.boot.api.post.dto.PostDto;
 import com.tensing.boot.api.post.service.PostService;
-import com.tensing.boot.config.OpenApiConfiguration;
-import com.tensing.boot.security.code.RoleCode;
-import com.tensing.boot.security.dto.SecurityDto;
+import com.tensing.boot.global.config.OpenApiConfiguration;
+import com.tensing.boot.global.security.code.RoleCode;
+import com.tensing.boot.global.security.dto.SecurityDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
