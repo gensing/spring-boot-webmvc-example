@@ -1,4 +1,4 @@
-package com.tensing.boot.security.repository;
+package com.tensing.boot.security.dto;
 
 import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;

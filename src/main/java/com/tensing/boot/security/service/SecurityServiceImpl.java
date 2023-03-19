@@ -7,7 +7,7 @@ import com.tensing.boot.exception.code.ErrorCode;
 import com.tensing.boot.exception.exception.BusinessException;
 import com.tensing.boot.security.code.RoleCode;
 import com.tensing.boot.security.dto.SecurityDto;
-import com.tensing.boot.security.repository.RefreshToken;
+import com.tensing.boot.security.dto.RefreshToken;
 import com.tensing.boot.security.repository.RefreshTokenRepository;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -16,7 +16,6 @@ import org.springframework.security.access.AccessDeniedException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
