@@ -1,0 +1,90 @@
+// httpClient 테스트용
+
+// index 생성
+PUT http://localhost:9200/post
+Content-Type: application/json
+
+{
+    "settings": {
+        "analysis": {
+            "tokenizer": {
+                "custom_nori_tokenizer": {
+                    "type": "nori_tokenizer",
+                    "decompound_mode": "mixed",
+                    "user_dictionary": "dic/user.txt"
+                }
+            },
+            "analyzer": {
+                "korean_analyzer": {
+                    "type": "custom",
+                    "tokenizer": "custom_nori_tokenizer",
+                    "filter": [
+                        "pos_filter_speech",
+                        "nori_readingform",
+                        "lowercase",
+                        "synonym",
+                        "remove_duplicates"
+                    ]
+                }
+            },
+            "filter": {
+                "pos_filter_speech": {
+                    "type": "nori_part_of_speech",
+                    "stoptags": [ "E", "J", "SC", "SE", "SF", "SP", "SSC", "SSO", "SY", "VCN", "VCP", "VSV", "VX", "XPN", "XSA", "XSN", "XSV" ]
+                },
+                "synonym": {
+                    "type": "synonym_graph",
+                    "synonyms_path": "dic/synonym.txt"
+                }
+            }
+        }
+    },
+    "mappings": {
+        "properties" : {
+            "id" : { "type":"integer" },
+            "title" : { "type":"text", "analyzer":"korean_analyzer" },
+            "description": { "type":"text", "analyzer":"korean_analyzer" },
+            "createdAt": { "type":"date" },
+            "updatedAt": { "type":"date" }
+        }
+    }
+}
+
+// index 정보 확인
+GET http://localhost:9200/post
+Content-Type: application/json
+
+// 인덱스 삭제
+DELETE http://localhost:9200/post
+Content-Type: application/json
+
+// doc 추가
+PUT http://localhost:9200/post/_doc/1
+Content-Type: application/json
+
+{
+  "id":1,
+  "title":"사과 나무",
+  "description": "사과"
+}
+
+// 검색
+GET http://localhost:9200/post/_search
+Content-Type: application/json
+
+{
+  "query": { "match_all":{ }  }
+}
+
+GET http://localhost:9200/post/_search
+Content-Type: application/json
+
+{
+  "query": {
+      "bool": {
+         "must": [
+            { "match": { "title": "사과" }}
+         ]
+      }
+   }
+}
