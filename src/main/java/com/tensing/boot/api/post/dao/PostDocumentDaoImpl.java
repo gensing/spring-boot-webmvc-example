@@ -1,8 +1,7 @@
-package com.tensing.boot.api.search.dao;
+package com.tensing.boot.api.post.dao;
 
-import com.tensing.boot.api.search.document.SearchDocument;
-import com.tensing.boot.api.search.dto.SearchCondition;
-import com.tensing.boot.api.search.dao.SearchDao;
+import com.tensing.boot.api.post.document.PostDocument;
+import com.tensing.boot.api.post.dto.SearchCondition;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;
@@ -13,17 +12,17 @@ import org.springframework.util.StringUtils;
 import java.util.List;
 
 @RequiredArgsConstructor
-public class SearchDaoImpl implements SearchDao {
+public class PostDocumentDaoImpl implements PostDocumentDao {
 
     // CriteriaQuery, StringQuery, NativeSearchQuery
     private final ElasticsearchOperations operations;
 
-    public List<SearchDocument> search(SearchCondition searchCondition, Pageable pageable) {
+    public List<PostDocument> search(SearchCondition searchCondition, Pageable pageable) {
         var query = createConditionCriteriaQuery(searchCondition);
         // page 시작은 0번 부터, sort 필드 체크 기능 필요 ( 실제로 있는 필드만 받을 수 있도록, integer 필드 정렬 안됨 확인 필요. )
         pageable.getSort();
         query.setPageable(pageable);
-        var search = operations.search(query, SearchDocument.class);
+        var search = operations.search(query, PostDocument.class);
         return search.stream()
                 .map(i -> i.getContent())
                 .toList();

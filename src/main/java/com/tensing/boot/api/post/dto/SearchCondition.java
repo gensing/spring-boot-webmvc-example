@@ -1,4 +1,4 @@
-package com.tensing.boot.api.search.dto;
+package com.tensing.boot.api.post.dto;
 
 import lombok.Getter;
 import lombok.Setter;

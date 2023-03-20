@@ -1,4 +1,4 @@
-package com.tensing.boot.api.search.document;
+package com.tensing.boot.api.post.document;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
@@ -12,10 +12,10 @@ import java.time.LocalDateTime;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Document(indexName = "search")
-@Mapping(mappingPath = "elastic/search-mapping.json")
-@Setting(settingPath = "elastic/search-setting.json")
-public class SearchDocument {
+@Document(indexName = "post")
+@Mapping(mappingPath = "elastic/post-mapping.json")
+@Setting(settingPath = "elastic/post-setting.json")
+public class PostDocument {
 
     @Id
     @Field(value = "id", type = FieldType.Integer)

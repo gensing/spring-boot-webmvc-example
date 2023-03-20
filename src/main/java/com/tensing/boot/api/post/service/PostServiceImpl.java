@@ -1,12 +1,16 @@
 package com.tensing.boot.api.post.service;
 
+import com.tensing.boot.api.post.dao.PostDocumentRepository;
+import com.tensing.boot.api.post.document.PostDocument;
 import com.tensing.boot.api.post.dto.PostDto;
+import com.tensing.boot.api.post.dto.SearchCondition;
 import com.tensing.boot.api.post.entity.Post;
 import com.tensing.boot.api.post.dao.PostRepository;
 import com.tensing.boot.global.exception.code.ErrorCode;
 import com.tensing.boot.global.exception.exception.BusinessException;
 import com.tensing.boot.global.security.dto.SecurityDto;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -16,6 +20,7 @@ import java.util.List;
 public class PostServiceImpl implements PostService {
 
     private final PostRepository postRepository;
+    private final PostDocumentRepository searchRepository;
 
     @Override
     public long insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo) {
@@ -25,7 +30,7 @@ public class PostServiceImpl implements PostService {
     }
 
     @Override
-    public List<PostDto.PostResponse> getList() {
+    public List<PostDto.PostResponse> getList(Pageable pageable) {
         return postRepository.findAll().stream().map(post -> PostDto.PostResponse.of(post)).toList();
     }
 
@@ -44,5 +49,10 @@ public class PostServiceImpl implements PostService {
     @Override
     public void delete(long postId, SecurityDto.UserInfo sessionInfo) {
 
+    }
+
+    @Override
+    public List<PostDocument> search(SearchCondition searchCondition, Pageable pageable) {
+        return searchRepository.search(searchCondition, pageable);
     }
 }

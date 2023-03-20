@@ -1,6 +1,8 @@
 package com.tensing.boot.api.post.controller;
 
+import com.tensing.boot.api.post.document.PostDocument;
 import com.tensing.boot.api.post.dto.PostDto;
+import com.tensing.boot.api.post.dto.SearchCondition;
 import com.tensing.boot.api.post.service.PostService;
 import com.tensing.boot.global.config.OpenApiConfiguration;
 import com.tensing.boot.global.security.code.RoleCode;
@@ -8,6 +10,9 @@ import com.tensing.boot.global.security.dto.SecurityDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.annotation.Secured;
@@ -24,18 +29,16 @@ public class PostController {
 
     private final PostService postService;
 
-    @PostMapping("")
-    @Secured(value = RoleCode.USER_VALUE)
-    @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
-    public ResponseEntity<Void> create(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @RequestBody @Valid PostDto.PostRequest postRequest) {
-        final long postId = postService.insert(postRequest, sessionInfo);
-        return ResponseEntity.created(URI.create("/api/posts/" + postId)).build();
+    @GetMapping("/_search")
+    @ResponseStatus(HttpStatus.OK)
+    public List<PostDocument> search(SearchCondition searchCondition, @PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable) {
+        return postService.search(searchCondition, pageable);
     }
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDto.PostResponse> getList() {
-        return postService.getList();
+    public List<PostDto.PostResponse> getList(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
+        return postService.getList(pageable);
     }
 
     @GetMapping("/{postId}")
@@ -44,17 +47,24 @@ public class PostController {
         return postService.get(postId);
     }
 
+    @PostMapping("")
+    @Secured(RoleCode.USER_VALUE)
+    @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
+    public ResponseEntity<Void> create(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @RequestBody @Valid PostDto.PostRequest postRequest) {
+        final long postId = postService.insert(postRequest, sessionInfo);
+        return ResponseEntity.created(URI.create("/api/posts/" + postId)).build();
+    }
+
     @PutMapping("/{postId}")
-    @Secured(value = RoleCode.USER_VALUE)
+    @Secured(RoleCode.USER_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public void put(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long postId, @RequestBody @Valid PostDto.PostPutRequest postPutRequest) {
         postService.put(postId, postPutRequest, sessionInfo);
     }
 
-
     @DeleteMapping("/{postId}")
-    @Secured(value = RoleCode.USER_VALUE)
+    @Secured(RoleCode.USER_VALUE)
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public void delete(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long postId) {
