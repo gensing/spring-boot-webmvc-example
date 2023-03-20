@@ -12,4 +12,5 @@ logging:
   file: ./log
   charset:
     console: UTF-8
-  config: classpath:logback-spring.xml
+    file: UTF-8
+  config: classpath:logback-spring-${spring.profiles.active}.xml

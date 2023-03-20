@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="false" scanPeriod="60 seconds">
+
+    <include resource="org/springframework/boot/logging/logback/defaults.xml" />
+
+    <springProperty name="LOG_PATH" scope="context" source="logging.file"/>
+    <springProperty name="LOG_STDOUT_CHARSET" scope="context" source="logging.charset.console"/>
+    <property name="LOG_PATTERN" value="%clr([%X{request_id:-no-transaction-id}] %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n)"/>
+
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <encoder>
+            <charset>${LOG_STDOUT_CHARSET}</charset>
+            <pattern>${LOG_STDOUT_PATTERN}</pattern>
+        </encoder>
+    </appender>
+
+    <root level="DEBUG">
+        <appender-ref ref="STDOUT"/>
+    </root>
+
+</configuration>
