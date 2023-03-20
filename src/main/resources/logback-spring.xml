@@ -3,8 +3,7 @@
 
     <!--Environment 내의 프로퍼티들을 개별적으로 설정할 수도 있다. -->
     <springProperty name="LOG_PATH" scope="context" source="logging.file"/>
-    <property name="LOG_PATTERN"
-              value="[%X{request_id:-no-transaction-id}] %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+    <property name="LOG_PATTERN" value="[%X{request_id:-no-transaction-id}] %d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
 
     <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
         <encoder>
@@ -48,9 +47,34 @@
         </rollingPolicy>
     </appender>
 
+    <!-- Logstash -->
+    <appender name="LOGSTASH" class="net.logstash.logback.appender.LogstashTcpSocketAppender">
+        <destination>localhost:5000</destination>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>request_id</includeMdcKeyName>
+            <customFields>{"profile":"local"}</customFields>
+        </encoder>
+    </appender>
+
+    <!-- Logstash file : filebeat 등을 사용하여 로그스태시 연동 -->
+    <appender name="LOGSTASH_FILE" class="ch.qos.logback.core.rolling.RollingFileAppender">
+        <file>${LOG_PATH}/log-json.log</file>
+        <encoder class="net.logstash.logback.encoder.LogstashEncoder">
+            <includeMdcKeyName>request_id</includeMdcKeyName>
+        </encoder>
+        <rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+            <fileNamePattern>${LOG_PATH}/log_json_%d{yyyy-MM-dd}.%i.log</fileNamePattern>
+            <maxHistory>90</maxHistory>
+            <timeBasedFileNamingAndTriggeringPolicy class="ch.qos.logback.core.rolling.SizeAndTimeBasedFNATP">
+                <maxFileSize>10MB</maxFileSize>
+            </timeBasedFileNamingAndTriggeringPolicy>
+        </rollingPolicy>
+    </appender>
+
     <root>
         <springProfile name="local">
             <appender-ref ref="STDOUT"/>
+            <appender-ref ref="LOGSTASH"/>
         </springProfile>
         <springProfile name="dev">
             <appender-ref ref="FILE"/>
@@ -63,6 +87,7 @@
         <springProfile name="prod">
             <appender-ref ref="FILE"/>
             <appender-ref ref="ERROR_FILE"/>
+            <appender-ref ref="LOGSTASH_FILE"/>
         </springProfile>
     </root>
 
