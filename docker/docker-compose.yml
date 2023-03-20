@@ -5,7 +5,7 @@ services:
     container_name: mariadb
     restart: always
     ports:
-      - 3306:3306
+      - "3306:3306"
     volumes:
       - ./mariadb/conf.d:/etc/mysql/conf.d
       - ./mariadb/initdb.d:/docker-entrypoint-initdb.d
@@ -23,10 +23,11 @@ services:
     container_name: redis
     command: redis-server --port 6379
     ports:
-      - 6379:6379
+      - "6379:6379"
   elasticsearch:
     build:
       context: ./elasticsearch/
+      dockerfile: Dockerfile
       args:
         ELK_VERSION: 7.15.2
     container_name: elasticsearch
@@ -44,11 +45,11 @@ services:
       - http.cors.enabled=false
       - http.cors.allow-origin=/https?:\/\/localhost(:[0-9]+)?/
     ports:
-      - 9200:9200
-      - 9300:9300
+      - "9200:9200"
+      - "9300:9300"
     volumes:
       #- ./elasticsearch/config/elasticsearch.yml:/usr/share/elasticsearch/config/elasticsearch.yml
-      - ./elasticsearch/config/dic:/usr/share/elasticsearch/config/dic/
+      - ./elasticsearch/config/dic:/usr/share/elasticsearch/config/dic
       - ./../docker-data/elasticsearch/data:/usr/share/elasticsearch/data
       - ./../docker-data/elasticsearch/log:/usr/share/elasticsearch/log
     networks:
@@ -56,6 +57,7 @@ services:
   logstash:
     build:
       context: ./logstash/
+      dockerfile: Dockerfile
       args:
         ELK_VERSION: 7.15.2
     container_name: logstash
@@ -82,7 +84,7 @@ services:
       SERVER_NAME: kibana
       ELASTICSEARCH_HOSTS: http://elasticsearch:9200
     ports:
-      - 5601:5601
+      - "5601:5601"
     networks:
       - es-bridge
     depends_on:
@@ -91,7 +93,7 @@ services:
     image: confluentinc/cp-zookeeper:latest
     container_name: zookeeper
     ports:
-      - 21812:2181
+      - "21812:2181"
     environment:
       ZOOKEEPER_SERVER_ID: 1
       ZOOKEEPER_CLIENT_PORT: 21812
@@ -102,7 +104,7 @@ services:
     image: confluentinc/cp-kafka:latest
     container_name: kafka
     ports:
-      - 9093:9093
+      - "9093:9093"
     environment:
       KAFKA_BROKER_ID: 1
       KAFKA_ADVERTISED_HOST_NAME: 127.0.0.1
