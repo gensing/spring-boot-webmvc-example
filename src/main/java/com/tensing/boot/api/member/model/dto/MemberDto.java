@@ -1,6 +1,6 @@
-package com.tensing.boot.api.member.dto;
+package com.tensing.boot.api.member.model.dto;
 
-import com.tensing.boot.api.member.entity.Member;
+import com.tensing.boot.api.member.model.vo.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;

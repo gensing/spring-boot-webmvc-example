@@ -1,6 +1,6 @@
 package com.tensing.boot.global.security.service;
 
-import com.tensing.boot.api.member.entity.Member;
+import com.tensing.boot.api.member.model.vo.entity.Member;
 import com.tensing.boot.api.member.service.MemberService;
 import com.tensing.boot.global.security.code.RoleCode;
 import com.tensing.boot.global.security.dto.SecurityDto;

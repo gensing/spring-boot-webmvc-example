@@ -1,4 +1,4 @@
-package com.tensing.boot.api.member.entity;
+package com.tensing.boot.api.member.model.vo.entity;
 
 import com.tensing.boot.global.common.entity.BaseEntity;
 import com.tensing.boot.global.security.code.RoleCode;

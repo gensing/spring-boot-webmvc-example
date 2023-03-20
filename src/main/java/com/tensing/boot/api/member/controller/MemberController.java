@@ -1,6 +1,6 @@
 package com.tensing.boot.api.member.controller;
 
-import com.tensing.boot.api.member.dto.MemberDto;
+import com.tensing.boot.api.member.model.dto.MemberDto;
 import com.tensing.boot.api.member.service.MemberService;
 import com.tensing.boot.global.config.OpenApiConfiguration;
 import com.tensing.boot.global.security.code.RoleCode;

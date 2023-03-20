@@ -1,8 +1,8 @@
 package com.tensing.boot.api.post.service;
 
-import com.tensing.boot.api.post.document.PostDocument;
-import com.tensing.boot.api.post.dto.PostDto;
-import com.tensing.boot.api.post.dto.SearchCondition;
+import com.tensing.boot.api.post.model.vo.document.PostDocument;
+import com.tensing.boot.api.post.model.dto.PostDto;
+import com.tensing.boot.api.post.model.dto.SearchCondition;
 import com.tensing.boot.global.security.dto.SecurityDto;
 import org.springframework.data.domain.Pageable;
 

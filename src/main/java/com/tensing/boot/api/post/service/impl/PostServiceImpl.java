@@ -1,10 +1,11 @@
-package com.tensing.boot.api.post.service;
+package com.tensing.boot.api.post.service.impl;
 
 import com.tensing.boot.api.post.dao.PostDocumentRepository;
-import com.tensing.boot.api.post.document.PostDocument;
-import com.tensing.boot.api.post.dto.PostDto;
-import com.tensing.boot.api.post.dto.SearchCondition;
-import com.tensing.boot.api.post.entity.Post;
+import com.tensing.boot.api.post.service.PostService;
+import com.tensing.boot.api.post.model.vo.document.PostDocument;
+import com.tensing.boot.api.post.model.dto.PostDto;
+import com.tensing.boot.api.post.model.dto.SearchCondition;
+import com.tensing.boot.api.post.model.vo.entity.Post;
 import com.tensing.boot.api.post.dao.PostRepository;
 import com.tensing.boot.global.exception.code.ErrorCode;
 import com.tensing.boot.global.exception.exception.BusinessException;

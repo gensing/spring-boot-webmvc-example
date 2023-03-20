@@ -1,4 +1,4 @@
-package com.tensing.boot.api.post.document;
+package com.tensing.boot.api.post.model.vo.document;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;

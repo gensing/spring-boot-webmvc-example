@@ -1,6 +1,6 @@
-package com.tensing.boot.api.post.entity;
+package com.tensing.boot.api.post.model.vo.entity;
 
-import com.tensing.boot.api.member.entity.Member;
+import com.tensing.boot.api.member.model.vo.entity.Member;
 import com.tensing.boot.global.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -28,5 +28,13 @@ public class Post extends BaseEntity {
 
     @Column(name = "body", nullable = false)
     private String body;
+
+//    @Column(name = "isDelete", nullable = false)
+//    private Boolean isDelete;
+//
+//    @PrePersist
+//    public void prePersist() {
+//        isDelete = isDelete == null ? false : true;
+//    }
 
 }

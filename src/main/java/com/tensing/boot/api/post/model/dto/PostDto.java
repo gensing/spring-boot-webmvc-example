@@ -1,9 +1,9 @@
-package com.tensing.boot.api.post.dto;
+package com.tensing.boot.api.post.model.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.tensing.boot.api.member.entity.Member;
-import com.tensing.boot.api.post.entity.Post;
+import com.tensing.boot.api.member.model.vo.entity.Member;
+import com.tensing.boot.api.post.model.vo.entity.Post;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

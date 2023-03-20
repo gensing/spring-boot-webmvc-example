@@ -1,7 +1,7 @@
 package com.tensing.boot.api.member.service;
 
-import com.tensing.boot.api.member.entity.Member;
-import com.tensing.boot.api.member.dto.MemberDto;
+import com.tensing.boot.api.member.model.vo.entity.Member;
+import com.tensing.boot.api.member.model.dto.MemberDto;
 import com.tensing.boot.api.member.dao.MemberRepository;
 import com.tensing.boot.global.exception.code.ErrorCode;
 import com.tensing.boot.global.exception.exception.BusinessException;
