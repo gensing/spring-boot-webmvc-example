@@ -13,7 +13,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Getter
-public class Post extends BaseEntity {
+public class PostEntity extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id", updatable = false)
@@ -29,9 +29,9 @@ public class Post extends BaseEntity {
     @Column(name = "body", nullable = false)
     private String body;
 
-    public void update(Post post) {
-        this.title = post.getTitle();
-        this.body = post.getBody();
+    public void update(PostEntity postEntity) {
+        this.title = postEntity.getTitle();
+        this.body = postEntity.getBody();
     }
 
 //    @Column(name = "isDelete", nullable = false)
