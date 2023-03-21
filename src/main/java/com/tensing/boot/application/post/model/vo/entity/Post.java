@@ -29,6 +29,11 @@ public class Post extends BaseEntity {
     @Column(name = "body", nullable = false)
     private String body;
 
+    public void update(Post post) {
+        this.title = post.getTitle();
+        this.body = post.getBody();
+    }
+
 //    @Column(name = "isDelete", nullable = false)
 //    private Boolean isDelete;
 //

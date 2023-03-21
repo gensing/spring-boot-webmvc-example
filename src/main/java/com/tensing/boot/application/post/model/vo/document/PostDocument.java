@@ -29,9 +29,9 @@ public class PostDocument {
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Field(value = "created_at", type = FieldType.Date)
-    private LocalDateTime createdAt;
+    private LocalDateTime createdDate;
 
     @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Field(value = "updated_at", type = FieldType.Date)
-    private LocalDateTime updatedAt;
+    private LocalDateTime updatedDate;
 }

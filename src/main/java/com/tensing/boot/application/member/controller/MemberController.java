@@ -33,9 +33,9 @@ public class MemberController {
     @ResponseStatus(HttpStatus.OK)
     @Secured(value = RoleCode.USER_VALUE)
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
-    public MemberDto.MemberGetResponse getMember(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long memberId) {
-        final var member = memberService.findMember(sessionInfo.getId(), memberId);
-        return MemberDto.MemberGetResponse.of(member);
+    public MemberDto.MemberResponse getMember(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long memberId) {
+        final var member = memberService.findMember(memberId, sessionInfo);
+        return member;
     }
 
 }

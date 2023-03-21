@@ -2,32 +2,25 @@ package com.tensing.boot.application.post.model.dto;
 
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
 import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
-import com.tensing.boot.application.member.model.vo.entity.Member;
-import com.tensing.boot.application.post.model.vo.entity.Post;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
 public class PostDto {
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class PostRequest {
         private String title;
         private String body;
-
-        public Post to(long memberId) {
-            return Post.builder()
-                    .member(Member.builder().id(memberId).build())
-                    .title(this.title)
-                    .body(this.body)
-                    .build();
-        }
     }
 
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class PostResponse {
@@ -35,25 +28,15 @@ public class PostDto {
         private String writer;
         private String title;
         private String body;
-
         @JsonSerialize(using = LocalDateTimeSerializer.class)
-        private LocalDateTime writeDate;
-
+        private LocalDateTime createdDate;
         @JsonSerialize(using = LocalDateTimeSerializer.class)
-        private LocalDateTime updateDate;
-
-        public static PostDto.PostResponse of(Post post) {
-            return PostResponse.builder()
-                    .id(post.getId())
-                    .writer(post.getMember().getUsername())
-                    .title(post.getTitle())
-                    .body(post.getBody())
-                    .writeDate(post.getCreatedDate())
-                    .updateDate(post.getUpdatedDate())
-                    .build();
-        }
+        private LocalDateTime updatedDate;
     }
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class PostPutRequest {

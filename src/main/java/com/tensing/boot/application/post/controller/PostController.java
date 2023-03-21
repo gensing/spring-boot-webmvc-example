@@ -1,6 +1,5 @@
 package com.tensing.boot.application.post.controller;
 
-import com.tensing.boot.application.post.model.vo.document.PostDocument;
 import com.tensing.boot.application.post.model.dto.PostDto;
 import com.tensing.boot.application.post.model.dto.SearchCondition;
 import com.tensing.boot.application.post.service.PostService;
@@ -31,7 +30,7 @@ public class PostController {
 
     @GetMapping("/_search")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDocument> search(SearchCondition searchCondition, @PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable) {
+    public List<PostDto.PostResponse> search(SearchCondition searchCondition, @PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable) {
         return postService.search(searchCondition, pageable);
     }
 
@@ -60,7 +59,7 @@ public class PostController {
     @ResponseStatus(HttpStatus.OK)
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public void put(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long postId, @RequestBody @Valid PostDto.PostPutRequest postPutRequest) {
-        postService.put(postId, postPutRequest, sessionInfo);
+        postService.update(postId, postPutRequest, sessionInfo);
     }
 
     @DeleteMapping("/{postId}")

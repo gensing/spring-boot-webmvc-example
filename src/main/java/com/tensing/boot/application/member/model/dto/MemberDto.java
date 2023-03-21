@@ -1,16 +1,16 @@
 package com.tensing.boot.application.member.model.dto;
 
-import com.tensing.boot.application.member.model.vo.entity.Member;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.Setter;
+import lombok.*;
 
 public class MemberDto {
 
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
     public static class MemberRequest {
@@ -28,33 +28,13 @@ public class MemberDto {
     }
 
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     @Setter
     @Getter
-    public static class MemberGetResponse {
+    public static class MemberResponse {
         private String username;
         private String email;
-
-        public static MemberGetResponse of(Member member) {
-            return MemberGetResponse.builder()
-                    .username(member.getUsername())
-                    .email(member.getEmail())
-                    .build();
-        }
-    }
-
-    @Setter
-    @Getter
-    public static class PostResponse {
-    }
-
-    @Setter
-    @Getter
-    public static class PutRequest {
-    }
-
-    @Getter
-    @Builder
-    public static class PutResponse {
     }
 
 }
