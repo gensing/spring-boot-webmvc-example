@@ -1,7 +1,7 @@
 package com.tensing.boot.application.member.model;
 
 import com.tensing.boot.application.member.model.dto.MemberDto;
-import com.tensing.boot.application.member.model.vo.entity.Member;
+import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
 import com.tensing.boot.global.filters.security.model.code.RoleCode;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
@@ -26,9 +26,9 @@ public abstract class MemberMapper {
             @Mapping(source = "memberRequest.email", target = "email"),
             @Mapping(source = "roles", target = "roles")
     })
-    public abstract Member toMember(MemberDto.MemberRequest memberRequest, Set<RoleCode> roles);
+    public abstract MemberEntity toMember(MemberDto.MemberRequest memberRequest, Set<RoleCode> roles);
 
-    public abstract MemberDto.MemberResponse toMemberResponse(Member member);
+    public abstract MemberDto.MemberResponse toMemberResponse(MemberEntity memberEntity);
 
     @Named("encryptPassword")
     String encryptPassword(String password) {

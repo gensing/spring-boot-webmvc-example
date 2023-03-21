@@ -1,6 +1,6 @@
 package com.tensing.boot.application.post.model.vo.entity;
 
-import com.tensing.boot.application.member.model.vo.entity.Member;
+import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
 import com.tensing.boot.common.model.vo.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
@@ -21,7 +21,7 @@ public class PostEntity extends BaseEntity {
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name = "member_id", updatable = false)
-    private Member member;
+    private MemberEntity memberEntity;
 
     @Column(name = "title", nullable = false)
     private String title;

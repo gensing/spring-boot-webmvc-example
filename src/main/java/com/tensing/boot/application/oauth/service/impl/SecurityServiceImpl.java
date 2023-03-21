@@ -1,14 +1,13 @@
 package com.tensing.boot.application.oauth.service.impl;
 
-import com.tensing.boot.application.member.model.vo.entity.Member;
 import com.tensing.boot.application.member.service.MemberService;
-import com.tensing.boot.global.filters.security.model.code.RoleCode;
-import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
-import com.tensing.boot.common.modules.TokenProvider;
-import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
-import com.tensing.boot.global.advice.exception.exception.BusinessException;
-import com.tensing.boot.global.filters.security.model.dto.RefreshToken;
 import com.tensing.boot.application.oauth.dao.RefreshTokenRepository;
+import com.tensing.boot.common.modules.TokenProvider;
+import com.tensing.boot.global.advice.exception.exception.BusinessException;
+import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
+import com.tensing.boot.global.filters.security.model.code.RoleCode;
+import com.tensing.boot.global.filters.security.model.dto.RefreshToken;
+import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import com.tensing.boot.global.filters.security.service.SecurityService;
 import io.jsonwebtoken.*;
 import lombok.RequiredArgsConstructor;
@@ -81,17 +80,16 @@ public class SecurityServiceImpl implements SecurityService {
         return new UsernamePasswordAuthenticationToken(userInfo, null, auths);
     }
 
-
     private SecurityDto.TokenResponse getToken(String username, String password) {
 
-        final Member member = Optional.ofNullable(memberService.findMember(username, password))
+        final var memberEntity = Optional.ofNullable(memberService.findMember(username, password))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
 
-        final var descRoles = member.getRoles();
+        final var descRoles = memberEntity.getRoles();
         final var roles = descRoles != null ? descRoles.stream().map(i -> RoleCode.getByDesc(i.getDesc()).getRoleName()).toList() : null;
 
-        final Claims claim = Jwts.claims();
-        claim.put("userId", member.getId());
+        final var claim = Jwts.claims();
+        claim.put("userId", memberEntity.getId());
         claim.put("roles", roles); // List.of(RoleCode.USER.getRoleName())
 
         claim.setSubject("atk");
@@ -102,7 +100,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         // redis 에 refresh token 저장.
         //refreshTokenRepository.deleteById(member.getId());
-        refreshTokenRepository.save(RefreshToken.builder().memberId(member.getId()).jwt(rtk).build());
+        refreshTokenRepository.save(RefreshToken.builder().memberId(memberEntity.getId()).jwt(rtk).build());
 
         return SecurityDto.TokenResponse.builder()
                 .accessToken(atk)
@@ -114,7 +112,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         final var claim = refreshTokenProvider.decodeToken(refreshToken);
 
-        var userId = claim.get("userId", Long.class);
+        final var userId = claim.get("userId", Long.class);
 
         final var rtk = refreshTokenRepository.findById(userId)
                 .orElseThrow(() -> new AccessDeniedException("not found session"));

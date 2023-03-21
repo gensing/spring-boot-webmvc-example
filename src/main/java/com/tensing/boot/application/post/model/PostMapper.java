@@ -13,18 +13,18 @@ public abstract class PostMapper {
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(source = "memberId", target = "member.id"),
+            @Mapping(source = "memberId", target = "memberEntity.id"),
     })
     public abstract PostEntity toPost(PostDto.PostRequest postRequest, Long memberId);
 
     @Mappings({
             @Mapping(target = "id", ignore = true),
-            @Mapping(target = "member", ignore = true),
+            @Mapping(target = "memberEntity", ignore = true),
     })
     public abstract PostEntity toPost(PostDto.PostPutRequest postPutRequest);
 
     @Mappings({
-            @Mapping(source = "post.member.username", target = "writer"),
+            @Mapping(source = "postEntity.memberEntity.username", target = "writer"),
     })
     public abstract PostDto.PostResponse toPostResponse(PostEntity postEntity);
 

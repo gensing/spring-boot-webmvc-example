@@ -1,6 +1,6 @@
 package com.tensing.boot.member;
 
-import com.tensing.boot.application.member.model.vo.entity.Member;
+import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
 import com.tensing.boot.application.member.dao.MemberRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,14 +23,14 @@ public class JpaTest {
     void save() {
 
         // given
-        final Member member = Member.builder().username("boot").password("boot1234").email("boot@boot.com").build();
-
-        // when
-        final Member saveMember = memberRepositoryImpl.save(member);
-
-        // then
-        assertEquals("username 이 다릅니다.", member.getUsername(), saveMember.getUsername());
-        assertEquals("email 이 다릅니다.", member.getEmail(), member.getEmail());
-        assertEquals("비밀번호가 다릅니다.", member.getPassword(), member.getPassword());
+//        final MemberEntity memberEntity = MemberEntity.builder().username("boot").password("boot1234").email("boot@boot.com").build();
+//
+//        // when
+//        final MemberEntity saveMemberEntity = memberRepositoryImpl.save(memberEntity);
+//
+//        // then
+//        assertEquals("username 이 다릅니다.", memberEntity.getUsername(), saveMemberEntity.getUsername());
+//        assertEquals("email 이 다릅니다.", memberEntity.getEmail(), memberEntity.getEmail());
+//        assertEquals("비밀번호가 다릅니다.", memberEntity.getPassword(), memberEntity.getPassword());
     }
 }

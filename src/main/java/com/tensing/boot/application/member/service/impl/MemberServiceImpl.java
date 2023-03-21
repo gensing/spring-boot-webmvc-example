@@ -3,7 +3,7 @@ package com.tensing.boot.application.member.service.impl;
 import com.tensing.boot.application.member.dao.MemberRepository;
 import com.tensing.boot.application.member.model.MemberMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
-import com.tensing.boot.application.member.model.vo.entity.Member;
+import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
@@ -29,12 +29,13 @@ public class MemberServiceImpl implements MemberService {
     @Transactional
     @Override
     public long createMember(MemberDto.MemberRequest postRequest) {
+
         if (memberRepository.existsByUsername(postRequest.getUsername()))
             throw new BusinessException(ErrorCode.DUPLICATION_USER);
 
-        final var member = memberMapper.toMember(postRequest, Set.of(RoleCode.USER));
+        final var savedMemberEntity = memberMapper.toMember(postRequest, Set.of(RoleCode.USER));
 
-        return memberRepository.save(member).getId();
+        return memberRepository.save(savedMemberEntity).getId();
     }
 
     @Transactional(readOnly = true)
@@ -44,21 +45,19 @@ public class MemberServiceImpl implements MemberService {
         if (!sessionInfo.checkId(memberId))
             throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
 
-        final var member = memberRepository.findById(memberId)
+        final var memberEntity = memberRepository.findById(memberId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_DATA));
 
-        return memberMapper.toMemberResponse(member);
+        return memberMapper.toMemberResponse(memberEntity);
     }
 
     @Transactional(readOnly = true)
     @Override
-    public Member findMember(String username, String password) {
-        final var member = memberRepository.findByUsername(username);
-        // 체크 필요
-        return (member.isPresent() && passwordEncoder.matches(password, member.get().getPassword()))
-                ? member.get()
-                : null;
-    }
+    public MemberEntity findMember(String username, String password) {
 
+        final var memberEntity = memberRepository.findByUsername(username);
+        final var isValidPassword = (memberEntity.isPresent() && passwordEncoder.matches(password, memberEntity.get().getPassword()));
+        return isValidPassword ? memberEntity.get() : null;
+    }
 
 }
