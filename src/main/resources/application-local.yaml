@@ -10,12 +10,15 @@ spring:
     database: MYSQL
     show-sql: true
     generate-ddl: true
+    properties:
+      default_batch_fetch_size: 1000 # N+1 문제 발생시 in 절로 1000개 단위로 나눠서 호출
   data:
     redis:
       host: localhost
       port: 6379
   kafka:
     bootstrap-servers: localhost:9093
+
 spring-doc:
   api-docs:
     path: /api-docs
@@ -27,7 +30,7 @@ spring-doc:
 logging:
   level:
     root: debug #INFO
-
+    org.apache.kafka: info
 
 tensing:
   jwt:
