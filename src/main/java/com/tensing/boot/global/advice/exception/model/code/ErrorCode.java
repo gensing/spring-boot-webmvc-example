@@ -20,6 +20,7 @@ public enum ErrorCode {
     COMMON_ERROR(400, "C001", "Common error"),
     HANDLE_ACCESS_DENIED(403, "C002", "access denied"),
     BAD_REQUEST(400, "C003", "bad request"),
+    NOT_FOUND_DATA(400, "C004", "not found data"),
     INTERNAL_SERVER_ERROR(500, "C000", "Internal server error");
 
 
