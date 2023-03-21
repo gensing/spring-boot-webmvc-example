@@ -49,6 +49,10 @@ public class SecurityDto {
     @Builder
     public static class UserInfo {
         private long id;
+
+        public boolean checkId(Long checkId) {
+            return checkId == null ? false : id == checkId;
+        }
     }
 
 }
