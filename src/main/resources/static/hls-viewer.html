@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <script src="https://cdn.jsdelivr.net/npm/hls.js@latest/dist/hls.min.js"></script>
+    <script>
+        function getUrlParams() {
+            var params = {};
+
+            window.location.search.replace(/[?&]+([^=&]+)=([^&]*)/gi,
+                function(str, key, value) {
+                    params[key] = value;
+                }
+            );
+
+            return params;
+        }
+
+    </script>
+</head>
+<!-- <body onkeydown="return false" oncontextmenu="return false" onselectstart="return false" ondragstart="return false">-->
+<body>
+<!-- hls 송신 기능은 추후 개발, 현재 obs 프로그램 사용해서 테스트 가능 -->
+<video id="video" controls></video>
+<script>
+    var queryString = getUrlParams();
+
+    if(queryString.streamName == null){
+        queryString.streamName = "hello";
+        //console.log("not found streamName in queryString");
+        //return;
+    }
+
+    var video = document.getElementById('video');
+    var videoSrc = `http://localhost:8080/live/${queryString.streamName}.m3u8`; // <- 테스트 URL 이므로 본인의 URL 작성
+    
+    if (video.canPlayType('application/vnd.apple.mpegurl')) {
+      video.src = videoSrc;
+      video.addEventListener('loadedmetadata', function(){
+        video.play();
+      });
+    } else if (Hls.isSupported()) {
+      var hls = new Hls();
+      hls.loadSource(videoSrc);
+      hls.attachMedia(video);
+      hls.on(Hls.Events.MANIFEST_PARSED, function(){
+        video.play();
+      });
+    }
+
+</script>
+</body>
+</html>
