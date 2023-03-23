@@ -1,15 +1,10 @@
 package com.tensing.boot.member;
 
-import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
-import com.tensing.boot.application.member.dao.MemberRepository;
+import com.tensing.boot.application.member.dao.MemberEntityRepository;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
-
-import static org.springframework.test.util.AssertionErrors.assertEquals;
-
-
 
 
 @ActiveProfiles("test")
@@ -17,7 +12,7 @@ import static org.springframework.test.util.AssertionErrors.assertEquals;
 public class JpaTest {
 
     @Autowired
-    private MemberRepository memberRepositoryImpl;
+    private MemberEntityRepository memberEntityRepositoryImpl;
 
     @Test
     void save() {

@@ -1,7 +1,7 @@
 package com.tensing.boot.application.oauth.service.impl;
 
 import com.tensing.boot.application.member.service.MemberService;
-import com.tensing.boot.application.oauth.dao.RefreshTokenRepository;
+import com.tensing.boot.application.oauth.dao.RefreshTokenCashRepository;
 import com.tensing.boot.common.modules.TokenProvider;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
@@ -31,7 +31,7 @@ public class SecurityServiceImpl implements SecurityService {
     private final MemberService memberService;
     private final TokenProvider accessTokenProvider;
     private final TokenProvider refreshTokenProvider;
-    private final RefreshTokenRepository refreshTokenRepository;
+    private final RefreshTokenCashRepository refreshTokenCashRepository;
 
     // 인증
     @Override
@@ -100,7 +100,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         // redis 에 refresh token 저장.
         //refreshTokenRepository.deleteById(member.getId());
-        refreshTokenRepository.save(RefreshToken.builder().memberId(memberEntity.getId()).jwt(rtk).build());
+        refreshTokenCashRepository.save(RefreshToken.builder().memberId(memberEntity.getId()).jwt(rtk).build());
 
         return SecurityDto.TokenResponse.builder()
                 .accessToken(atk)
@@ -114,7 +114,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         final var userId = claim.get("userId", Long.class);
 
-        final var rtk = refreshTokenRepository.findById(userId)
+        final var rtk = refreshTokenCashRepository.findById(userId)
                 .orElseThrow(() -> new AccessDeniedException("not found session"));
 
         if (!refreshToken.equals(rtk.getJwt()))
