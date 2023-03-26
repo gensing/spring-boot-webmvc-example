@@ -11,10 +11,6 @@ plugins {
     id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
 }
 
-ext {
-    snippetsDir = file('build/generated-snippets')
-}
-
 group = 'com.tensing'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = '17'
@@ -91,8 +87,13 @@ dependencies {
     testCompileOnly 'org.projectlombok:lombok'
     testAnnotationProcessor 'org.projectlombok:lombok'
 
-    // test dependency
-    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    // spring test dependency
+    testImplementation('org.springframework.boot:spring-boot-starter-test') {
+        exclude group: "org.junit.vintage", module: "junit-vintage-engine"
+    }
+
+    // test containers dependency
+    testImplementation("org.testcontainers:junit-jupiter")
 
     // spring security test
     testImplementation 'org.springframework.security:spring-security-test'
@@ -105,6 +106,16 @@ dependencies {
 
     // test redis dependency
     testImplementation('it.ozimov:embedded-redis:0.7.3') { exclude group: "org.slf4j", module: "slf4j-simple" }
+
+    // test kafka dependency
+    testImplementation 'org.springframework.kafka:spring-kafka-test:3.0.5'
+
+}
+
+dependencyManagement {
+    imports {
+        mavenBom("org.testcontainers:testcontainers-bom:1.17.6")
+    }
 }
 
 tasks.named('test') {
