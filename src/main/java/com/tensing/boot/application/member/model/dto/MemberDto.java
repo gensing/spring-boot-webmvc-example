@@ -5,9 +5,11 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 
 public class MemberDto {
 
+    @FieldNameConstants
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
@@ -27,6 +29,7 @@ public class MemberDto {
 
     }
 
+    @FieldNameConstants
     @Builder
     @AllArgsConstructor
     @NoArgsConstructor
