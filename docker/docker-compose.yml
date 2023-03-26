@@ -119,15 +119,6 @@ services:
       - ./../docker-data/kafka/data:/var/lib/kafka/data
     depends_on:
       - zookeeper
-  kurento: # webrtc 사용을 위한 turn/sturn 서버
-    image: kurento/kurento-media-server:latest
-    container_name: kurento
-    ports:
-      - "8888:8888/tcp"
-      - "5001-5050:5001-5050/udp"
-    environment:
-      KMS_MIN_PORT: 5001
-      KMS_MAX_PORT: 5050
   nginx-rtmp: # hls 를 위한 미디어 서버
     image: alfg/nginx-rtmp
     container_name: nginx-rtmp

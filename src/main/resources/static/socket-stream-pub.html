@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Camera capture</title>
+</head>
+<body>
+    <video id="video" autoplay audio=muted></video>
+    <button id="startButton">button</button>
+    <button id="stopButton">stop</button>
+
+    <script>
+        var mediaRecorder;
+        var recordedChunks;
+        var video = document.querySelector("#video");
+        var startButton = document.querySelector("#startButton");
+        var stopButton = document.querySelector("#stopButton");
+
+        startButton.addEventListener("click", startVideo);
+        stopButton.addEventListener("click", stopVideo);
+
+        function startVideo(){
+            console.log("startVideo")
+            navigator.mediaDevices.getUserMedia({ audio: true, video: { width: 1280, height: 720 } }).then(startRecording)
+        }
+
+        function stopVideo(){
+            video.srcObject.getTracks().forEach(track => track.stop());
+            mediaRecorder.stop();
+        }
+
+        function startRecording(stream){
+            video.srcObject = stream;
+            // MediaStreamRecorder
+            mediaRecorder = new MediaRecorder(stream);
+//          mediaRecorder.mimeType = 'video/webm';
+
+            recordedChunks=[];
+
+            mediaRecorder.ondataavailable = function(e){
+                if (e.data.size > 0) {
+                    console.log(e.data);
+                    recordedChunks.push(e.data)
+                }
+            }
+
+            mediaRecorder.onstop = function(e){
+                let blob = new Blob(recordedChunks, { 'type': 'video/mp4' });
+                console.log(blob);
+                //let newVideo = document.querySelector('#video');
+                //newVideo.src = window.URL.createObjectURL(blob);
+
+                let link = document.createElement('a');
+                link.download = 'hello.mp4';
+                link.href = URL.createObjectURL(blob);
+                link.click();
+                URL.revokeObjectURL(link.href);
+            }
+
+            mediaRecorder.start(1000);
+        }
+// https://melius.tistory.com/59
+// https://intrepidgeeks.com/tutorial/how-to-use-springboot-and-fmpeg-to-build-video-decoder
+// BinaryWebSocketHandler
+// https://stackoverflow.com/questions/51096770/how-to-receive-continuous-chunk-of-video-as-a-blob-array-and-set-to-video-tag-dy
+    </script>
+</body>
+</html>
