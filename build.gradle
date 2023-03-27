@@ -1,6 +1,9 @@
 buildscript {
     ext {
-        restdocsApiSpecVersion = '0.16.2'
+        restdocsApiSpecVersion = '0.17.1'
+    }
+    dependencies {
+        classpath "com.epages:restdocs-api-spec-gradle-plugin:${restdocsApiSpecVersion}" //1.2
     }
 }
 
@@ -92,13 +95,17 @@ dependencies {
         exclude group: "org.junit.vintage", module: "junit-vintage-engine"
     }
 
+    // jupiter dependency
+    testImplementation("org.junit.jupiter:junit-jupiter-engine")
+
     // test containers dependency
     testImplementation("org.testcontainers:junit-jupiter")
 
     // spring security test
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
+    // doc dependency , epages 1.6 버전은 spring-restdocs-mockmvc 기본 내장인데, 1.7은 포함을 안하고 있다... ( boot 3은 1.7 버전 사용 )
+    testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation "com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}"
 
     // test database dependency
