@@ -84,7 +84,7 @@ public class MemberControllerTest {
         log.info("******** END : MOC MVC test **********");
     }
 
-    //@Test
+    @Test
     @Order(1)
     @WithMockCustomUser(id = 1, role = RoleCode.USER)
     @DisplayName("유저 정보 확인")
