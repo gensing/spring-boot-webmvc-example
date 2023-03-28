@@ -95,6 +95,7 @@ public class MemberControllerTest {
         // when
         var perform = mockMvc.perform(get("/api/members/{id}", 1)
                 .contentType(MediaType.APPLICATION_JSON)
+                .header(HttpHeaders.AUTHORIZATION, " ")
                 .characterEncoding(StandardCharsets.UTF_8));
 
         // then
