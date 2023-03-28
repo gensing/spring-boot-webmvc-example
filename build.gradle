@@ -1,17 +1,21 @@
 buildscript {
     ext {
+        springBootVersion = '3.0.2'
         restdocsApiSpecVersion = '0.17.1'
+        swaggerGeneratorVersion = '2.19.2'
     }
-    dependencies {
-        classpath "com.epages:restdocs-api-spec-gradle-plugin:${restdocsApiSpecVersion}" //1.2
+    dependencies { // gradle 스크립트 작성시 필요한 라이브러리 ( task 등 )
+        classpath "com.epages:restdocs-api-spec-gradle-plugin:${restdocsApiSpecVersion}"
+        classpath "gradle.plugin.org.hidetake:gradle-swagger-generator-plugin:${swaggerGeneratorVersion}"
     }
 }
 
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.0.2'
+    id 'org.springframework.boot' version "${springBootVersion}"
     id 'io.spring.dependency-management' version '1.1.0'
     id 'com.epages.restdocs-api-spec' version "${restdocsApiSpecVersion}"
+    id "org.hidetake.swagger.generator" version "${swaggerGeneratorVersion}"
 }
 
 group = 'com.tensing'
@@ -26,6 +30,10 @@ configurations {
 
 repositories {
     mavenCentral()
+}
+
+bootJar {
+    dependsOn('copySwaggerUI')
 }
 
 dependencies {
@@ -77,6 +85,8 @@ dependencies {
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
     annotationProcessor "jakarta.persistence:jakarta.persistence-api"
+
+    swaggerUI 'org.webjars:swagger-ui:4.15.5'
 
     // mapstruct dependencies - lombok 보다 위에 있어야 builder 사용
     implementation 'org.mapstruct:mapstruct:1.5.3.Final'
@@ -130,10 +140,42 @@ tasks.named('test') {
 }
 
 openapi3 {
-    setServer("http://localhost")
+    // "$buildDir/resources/main/static/swagger-ui" 해당 경로에 openapi3.yaml 만들어짐 ( 어디서 만들고 있는지 확인 필요 )
+    // ${project.buildDir}/api-spec/openapi3.yaml 경로에 만들어짐
+    setServer("https://localhost")
     title = "restdocs-swagger API Documentation"
     description = "Spring REST Docs with SwaggerUI."
     version = "0.0.1"
     format = "yaml"
 }
+
+swaggerSources {
+    main{
+        // 스웨거 ui 에 사용 될 oas yaml 위치 지정
+        setInputFile(file("${project.buildDir}/api-spec/openapi3.yaml"))
+    }
+}
+
+tasks.withType(GenerateSwaggerUI) {
+    // 스웨거 ui 생성 전 oas yml 생성하도록 설정
+    dependsOn 'openapi3'
+}
+
+// 생성된 SwaggerUI 를 jar 에 포함시키기 위해 build/resources 경로로 로 복사
+tasks.register('copySwaggerUI', Copy) {
+
+    // 스웨거 ui 생성 ( html 파일 등 )
+    dependsOn 'generateSwaggerUIMain'
+
+    // 웹으로 접근 가능하도록 리소스 static 파일 위치로 복사 ( outputDir 읽어 오도록 확인 필요 임시로 아래 로직 사용 )
+    //def generateSwaggerUIMainTask = tasks.named('generateSwaggerUIMain', GenerateSwaggerUI).get()
+    //from("${generateSwaggerUIMainTask.outputDir}")
+
+    // 웹으로 접근 가능하도록 리소스 static 파일 위치로 복사
+    from("$buildDir/swagger-ui-main")
+    into("$buildDir/resources/main/static/swagger-ui")
+}
+
+
+
 
