@@ -4,6 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
+import com.tensing.boot.config.SecurityConfiguration;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -11,6 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
@@ -25,11 +27,12 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
+@Import(SecurityConfiguration.class)
 @ActiveProfiles("test")
 @TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@SpringBootTest
+@SpringBootTest // 시큐리티 and 서블릿 filter 는 자동 빈 등록을 안해준다.
 public class OAuthControllerTest {
 
     @Autowired
@@ -47,6 +50,10 @@ public class OAuthControllerTest {
             .password("test1234@T")
             .build();
 
+    @BeforeEach
+    public void setup() {
+    }
+
     @Test
     @Order(0)
     @DisplayName("토큰 발급")
@@ -63,7 +70,7 @@ public class OAuthControllerTest {
                 .refreshToken("")
                 .build();
 
-        var perform = mockMvc.perform(post("/api/security/tokens")
+        var perform = mockMvc.perform(post("/api/oauth/tokens")
                 .contentType(MediaType.APPLICATION_JSON)
                 .characterEncoding(StandardCharsets.UTF_8)
                 .content(objectMapper.writeValueAsString(tokenRequest)));
