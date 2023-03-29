@@ -1,4 +1,4 @@
-package com.tensing.boot.application.oauth.dao;
+package com.tensing.boot.global.filters.security.dao;
 
 import com.tensing.boot.global.filters.security.model.dto.RefreshToken;
 import org.springframework.data.repository.CrudRepository;

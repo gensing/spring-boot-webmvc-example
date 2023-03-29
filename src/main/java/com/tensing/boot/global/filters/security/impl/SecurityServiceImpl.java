@@ -1,7 +1,7 @@
-package com.tensing.boot.application.oauth.service.impl;
+package com.tensing.boot.global.filters.security.impl;
 
 import com.tensing.boot.application.member.service.MemberService;
-import com.tensing.boot.application.oauth.dao.RefreshTokenCashRepository;
+import com.tensing.boot.global.filters.security.dao.RefreshTokenCashRepository;
 import com.tensing.boot.common.modules.TokenProvider;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
