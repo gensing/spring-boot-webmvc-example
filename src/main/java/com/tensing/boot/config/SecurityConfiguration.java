@@ -1,9 +1,7 @@
 package com.tensing.boot.config;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.global.filters.security.filter.JwtAuthenticationFilter;
 import com.tensing.boot.global.filters.security.filter.JwtAuthorizationFilter;
-import com.tensing.boot.global.filters.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -26,8 +24,8 @@ import org.springframework.security.web.authentication.UsernamePasswordAuthentic
 )
 public class SecurityConfiguration {
 
-    private final SecurityService securityServiceImpl;
-    private final ObjectMapper objectMapper;
+    private final JwtAuthenticationFilter jwtAuthenticationFilter;
+    private final JwtAuthorizationFilter jwtAuthorizationFilter;
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -52,8 +50,8 @@ public class SecurityConfiguration {
         // http.authorizeRequests().anyRequest().permitAll();
 
         // add filter
-        http.addFilterBefore(new JwtAuthenticationFilter(objectMapper, securityServiceImpl), UsernamePasswordAuthenticationFilter.class);
-        http.addFilterBefore(new JwtAuthorizationFilter(securityServiceImpl), UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);
+        http.addFilterBefore(jwtAuthorizationFilter, UsernamePasswordAuthenticationFilter.class);
 
         return http.build();
     }
