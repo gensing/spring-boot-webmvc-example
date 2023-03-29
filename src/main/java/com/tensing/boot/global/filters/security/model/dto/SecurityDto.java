@@ -3,6 +3,8 @@ package com.tensing.boot.global.filters.security.model.dto;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
+import org.checkerframework.checker.units.qual.A;
 
 import java.util.Map;
 import java.util.function.Function;
@@ -27,8 +29,12 @@ public class SecurityDto {
         }
     }
 
+    @FieldNameConstants
     @Setter
     @Getter
+    @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class TokenRequest {
 
         @Schema(description = "로그인 방식 설정 필드", defaultValue = "USER_INFO")
@@ -38,15 +44,23 @@ public class SecurityDto {
         private String refreshToken;
     }
 
+    @FieldNameConstants
     @Getter
+    @Setter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class TokenResponse {
         private String accessToken;
         private String refreshToken;
     }
 
+    @FieldNameConstants
     @Getter
+    @Setter
     @Builder
+    @AllArgsConstructor
+    @NoArgsConstructor
     public static class UserInfo {
         private long id;
 
