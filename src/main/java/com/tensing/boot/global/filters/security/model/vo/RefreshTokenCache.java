@@ -1,6 +1,5 @@
-package com.tensing.boot.global.filters.security.model.dto;
+package com.tensing.boot.global.filters.security.model.vo;
 
-import jakarta.validation.constraints.NotBlank;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -17,7 +16,7 @@ import java.time.LocalDateTime;
 @NoArgsConstructor
 @AllArgsConstructor
 @RedisHash(value = "rtk", timeToLive = 300000)
-public class RefreshToken {
+public class RefreshTokenCache {
     @Id
     private long memberId;
 
@@ -26,7 +25,7 @@ public class RefreshToken {
     private LocalDateTime refreshTime;
 
     @Builder
-    public RefreshToken(long memberId, String jwt) {
+    public RefreshTokenCache(long memberId, String jwt) {
         this.memberId = memberId;
         this.jwt = jwt;
         this.refreshTime = LocalDateTime.now();
