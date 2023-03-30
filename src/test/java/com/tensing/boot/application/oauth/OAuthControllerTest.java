@@ -64,7 +64,7 @@ public class OAuthControllerTest {
 
         // when
         final var tokenRequest = SecurityDto.TokenRequest.builder()
-                .grantType(SecurityDto.GranType.USER_INFO)
+                .grantType(SecurityDto.GranType.ISSUE)
                 .username(memberRequest.getUsername())
                 .password(memberRequest.getPassword())
                 .refreshToken("")

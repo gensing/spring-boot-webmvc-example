@@ -6,7 +6,7 @@ import com.tensing.boot.common.modules.TokenProvider;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
 import com.tensing.boot.global.filters.security.model.code.RoleCode;
-import com.tensing.boot.global.filters.security.model.dto.RefreshToken;
+import com.tensing.boot.global.filters.security.model.vo.RefreshTokenCache;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import com.tensing.boot.global.filters.security.service.SecurityService;
 import io.jsonwebtoken.*;
@@ -37,7 +37,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest) {
         return switch (loginRequest.getGrantType()) {
-            case REFRESH_TOKEN -> getToken(loginRequest.getRefreshToken());
+            case REFRESH -> getToken(loginRequest.getRefreshToken());
             default -> getToken(loginRequest.getUsername(), loginRequest.getPassword());
         };
     }
@@ -100,7 +100,7 @@ public class SecurityServiceImpl implements SecurityService {
 
         // redis 에 refresh token 저장.
         //refreshTokenRepository.deleteById(member.getId());
-        refreshTokenCashRepository.save(RefreshToken.builder().memberId(memberEntity.getId()).jwt(rtk).build());
+        refreshTokenCashRepository.save(RefreshTokenCache.builder().memberId(memberEntity.getId()).jwt(rtk).build());
 
         return SecurityDto.TokenResponse.builder()
                 .accessToken(atk)
