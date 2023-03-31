@@ -24,29 +24,22 @@ import java.io.IOException;
 @Component
 public class JwtAuthorizationFilter extends OncePerRequestFilter {
 
-    public static final String BEARER_PREFIX = "Bearer ";
-
     private final SecurityService securityService;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
 
-        log.info("@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@22");
-        final String accessToken = resolveToken(request.getHeader(HttpHeaders.AUTHORIZATION));
+        final String bearerToken = request.getHeader(HttpHeaders.AUTHORIZATION);
 
-        if (StringUtils.hasText(accessToken)) {
+        if (StringUtils.hasText(bearerToken)) {
             try {
-                final Authentication authentication = securityService.getAuthentication(accessToken);
+                final Authentication authentication = securityService.getAuthenticationByBearerToken(bearerToken);
                 SecurityContextHolder.getContext().setAuthentication(authentication);
-            }catch (Exception e){
+            } catch (Exception e) {
                 response.sendError(HttpServletResponse.SC_BAD_REQUEST, "invalid access token");
             }
         }
 
         filterChain.doFilter(request, response);
-    }
-
-    private String resolveToken(String bearerToken) {
-        return (StringUtils.hasText(bearerToken) && bearerToken.startsWith(BEARER_PREFIX)) ? bearerToken.substring(7) : null;
     }
 }

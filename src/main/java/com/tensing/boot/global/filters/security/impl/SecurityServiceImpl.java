@@ -1,6 +1,7 @@
 package com.tensing.boot.global.filters.security.impl;
 
 import com.tensing.boot.application.member.service.MemberService;
+import com.tensing.boot.global.filters.security.Const;
 import com.tensing.boot.global.filters.security.dao.RefreshTokenCashRepository;
 import com.tensing.boot.common.modules.TokenProvider;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
@@ -18,6 +19,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.util.StringUtils;
 
 import java.util.List;
 import java.util.Optional;
@@ -27,6 +29,8 @@ import java.util.Optional;
 @Service
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
+
+    public static final String BEARER_PREFIX = "Bearer ";
 
     private final MemberService memberService;
     private final TokenProvider accessTokenProvider;
@@ -78,6 +82,18 @@ public class SecurityServiceImpl implements SecurityService {
         final var userInfo = SecurityDto.UserInfo.builder().id(id).build();
         final var auths = roles != null ? roles.stream().map(i -> new SimpleGrantedAuthority(String.valueOf(i))).toList() : null;
         return new UsernamePasswordAuthenticationToken(userInfo, null, auths);
+    }
+
+    @Override
+    public Authentication getAuthenticationByBearerToken(String bearerToken) {
+        final var accessToken = resolveToken(bearerToken);
+        return getAuthentication(accessToken);
+    }
+
+    private String resolveToken(String bearerToken) {
+        if (!StringUtils.hasText(bearerToken) && bearerToken.startsWith(Const.BEARER_PREFIX))
+            new BusinessException(ErrorCode.NOT_BEARER_TOKEN);
+        return bearerToken.substring(7);
     }
 
     private SecurityDto.TokenResponse getToken(String username, String password) {

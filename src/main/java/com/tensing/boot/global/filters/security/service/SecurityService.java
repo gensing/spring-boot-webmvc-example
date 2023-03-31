@@ -10,4 +10,6 @@ public interface SecurityService {
 
     // 검증
     Authentication getAuthentication(String accessToken);
+
+    Authentication getAuthenticationByBearerToken(String bearerToken);
 }
