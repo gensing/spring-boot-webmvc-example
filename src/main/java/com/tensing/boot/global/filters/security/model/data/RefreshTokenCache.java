@@ -1,4 +1,4 @@
-package com.tensing.boot.global.filters.security.model.vo;
+package com.tensing.boot.global.filters.security.model.data;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

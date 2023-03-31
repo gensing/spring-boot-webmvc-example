@@ -1,6 +1,6 @@
 package com.tensing.boot.application.post.dao;
 
-import com.tensing.boot.application.post.model.vo.document.PostDocument;
+import com.tensing.boot.application.post.model.data.PostDocument;
 import com.tensing.boot.application.post.model.dto.SearchCondition;
 import org.springframework.data.domain.Pageable;
 

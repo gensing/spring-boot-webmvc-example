@@ -2,7 +2,7 @@ package com.tensing.boot.application.post.dao.impl;
 
 import com.tensing.boot.application.post.dao.PostDocumentDao;
 import com.tensing.boot.application.post.model.dto.SearchCondition;
-import com.tensing.boot.application.post.model.vo.document.PostDocument;
+import com.tensing.boot.application.post.model.data.PostDocument;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.elasticsearch.core.ElasticsearchOperations;

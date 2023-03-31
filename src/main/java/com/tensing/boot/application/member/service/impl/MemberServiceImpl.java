@@ -3,7 +3,7 @@ package com.tensing.boot.application.member.service.impl;
 import com.tensing.boot.application.member.dao.MemberEntityRepository;
 import com.tensing.boot.application.member.model.MemberMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
-import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
+import com.tensing.boot.application.member.model.data.MemberEntity;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;

@@ -1,6 +1,6 @@
-package com.tensing.boot.application.post.model.vo.entity;
+package com.tensing.boot.application.post.model.data;
 
-import com.tensing.boot.application.member.model.vo.entity.MemberEntity;
+import com.tensing.boot.application.member.model.data.MemberEntity;
 import com.tensing.boot.common.model.vo.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;

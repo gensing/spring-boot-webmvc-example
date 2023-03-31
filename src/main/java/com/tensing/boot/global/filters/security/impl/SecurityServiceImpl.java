@@ -7,7 +7,7 @@ import com.tensing.boot.common.modules.TokenProvider;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
 import com.tensing.boot.global.filters.security.model.code.RoleCode;
-import com.tensing.boot.global.filters.security.model.vo.RefreshTokenCache;
+import com.tensing.boot.global.filters.security.model.data.RefreshTokenCache;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import com.tensing.boot.global.filters.security.service.SecurityService;
 import io.jsonwebtoken.*;

@@ -1,8 +1,8 @@
 package com.tensing.boot.application.post.model;
 
 import com.tensing.boot.application.post.model.dto.PostDto;
-import com.tensing.boot.application.post.model.vo.document.PostDocument;
-import com.tensing.boot.application.post.model.vo.entity.PostEntity;
+import com.tensing.boot.application.post.model.data.PostDocument;
+import com.tensing.boot.application.post.model.data.PostEntity;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;
