@@ -13,6 +13,8 @@ public enum ErrorCode {
     NOT_FOUND_MEMBER(400, "S001", "not found member data"),
     INVALID_JWT(400, "S002", "invalid jwt token"),
 
+    NOT_BEARER_TOKEN(400, "S003", "not bearer token"),
+
     // member
     DUPLICATION_USER(400, "M001", "exists user name"),
 
