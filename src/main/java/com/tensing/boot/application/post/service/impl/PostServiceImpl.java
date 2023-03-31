@@ -10,13 +10,14 @@ import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
-
+@Slf4j
 @RequiredArgsConstructor
 @Service
 public class PostServiceImpl implements PostService {
@@ -63,6 +64,7 @@ public class PostServiceImpl implements PostService {
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_DATA));
 
         if (!sessionInfo.checkId(savedPostEntity.getMemberEntity().getId())) {
+            log.info("invalid requestId - sessionId: {}, request id: {}", sessionInfo.getId(), savedPostEntity.getMemberEntity().getId());
             throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
         }
 
