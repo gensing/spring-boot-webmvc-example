@@ -24,9 +24,9 @@ public class MemberController {
     private final MemberService memberService;
 
     @PostMapping("")
-    public ResponseEntity<Void> createMember(@RequestBody @Valid MemberDto.MemberRequest postRequest) {
-        final var memberId = memberService.createMember(postRequest);
-        return ResponseEntity.created(URI.create("/api/members/" + memberId)).build();
+    public ResponseEntity<MemberDto.MemberResponse> createMember(@RequestBody @Valid MemberDto.MemberRequest postRequest) {
+        final var memberResponse = memberService.createMember(postRequest);
+        return ResponseEntity.created(URI.create("/api/members/" + memberResponse.getId())).body(memberResponse);
     }
 
     @GetMapping("/{memberId}")

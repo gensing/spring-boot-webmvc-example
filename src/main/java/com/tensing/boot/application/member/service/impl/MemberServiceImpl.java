@@ -28,14 +28,16 @@ public class MemberServiceImpl implements MemberService {
 
     @Transactional
     @Override
-    public long createMember(MemberDto.MemberRequest postRequest) {
+    public MemberDto.MemberResponse createMember(MemberDto.MemberRequest postRequest) {
 
-        if (memberEntityRepository.existsByUsername(postRequest.getUsername()))
+        final var memberEntity = memberMapper.toMember(postRequest, Set.of(RoleCode.USER));
+
+        if (memberEntityRepository.existsByUsername(memberEntity.getUsername()))
             throw new BusinessException(ErrorCode.DUPLICATION_USER);
 
-        final var savedMemberEntity = memberMapper.toMember(postRequest, Set.of(RoleCode.USER));
+        final var savedMemberEntity = memberEntityRepository.save(memberEntity);
 
-        return memberEntityRepository.save(savedMemberEntity).getId();
+        return memberMapper.toMemberResponse(savedMemberEntity);
     }
 
     @Transactional(readOnly = true)

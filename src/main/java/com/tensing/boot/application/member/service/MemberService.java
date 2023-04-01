@@ -5,7 +5,7 @@ import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 
 public interface MemberService {
-    long createMember(MemberDto.MemberRequest postRequest);
+    MemberDto.MemberResponse createMember(MemberDto.MemberRequest postRequest);
 
     MemberDto.MemberResponse findMember(long memberId, SecurityDto.UserInfo sessionInfo);
 
