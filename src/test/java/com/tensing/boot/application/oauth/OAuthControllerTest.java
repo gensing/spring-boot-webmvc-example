@@ -4,7 +4,7 @@ import com.epages.restdocs.apispec.ResourceSnippetParameters;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
-import com.tensing.boot.config.SecurityConfiguration;
+import com.tensing.boot.common.AcceptanceTestExecutionListener;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -12,9 +12,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
-import org.springframework.context.annotation.Import;
 import org.springframework.http.MediaType;
 import org.springframework.test.context.ActiveProfiles;
+import org.springframework.test.context.TestExecutionListeners;
 import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
@@ -27,12 +27,11 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @Slf4j
-@Import(SecurityConfiguration.class)
 @ActiveProfiles("test")
-@TestMethodOrder(MethodOrderer.OrderAnnotation.class)
 @AutoConfigureMockMvc
 @AutoConfigureRestDocs
-@SpringBootTest // 시큐리티 and 서블릿 filter 는 자동 빈 등록을 안해준다.
+@SpringBootTest
+@TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class OAuthControllerTest {
 
     @Autowired
@@ -44,23 +43,24 @@ public class OAuthControllerTest {
     @Autowired
     private MemberService memberService;
 
-    private final MemberDto.MemberRequest memberRequest = MemberDto.MemberRequest.builder()
-            .username("test1234")
-            .email("test1234@test.test")
-            .password("test1234@T")
-            .build();
+    private MemberDto.MemberRequest memberRequest;
 
     @BeforeEach
-    public void setup() {
+    void init() {
+        log.info("startup");
+        //list = new ArrayList<>(Arrays.asList("test1", "test2"));
+        memberRequest = MemberDto.MemberRequest.builder()
+                .username("test1234")
+                .email("test1234@test.test")
+                .password("test1234@T")
+                .build();
+        memberService.createMember(memberRequest);
     }
 
+
     @Test
-    @Order(0)
     @DisplayName("토큰 발급")
     void tokensTest() throws Exception {
-
-        // given
-        memberService.createMember(memberRequest);
 
         // when
         final var tokenRequest = SecurityDto.TokenRequest.builder()
