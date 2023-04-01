@@ -1,4 +1,4 @@
-package com.tensing.boot.common.model.vo.entity;
+package com.tensing.boot.common.model.data;
 
 import jakarta.persistence.*;
 import lombok.Getter;

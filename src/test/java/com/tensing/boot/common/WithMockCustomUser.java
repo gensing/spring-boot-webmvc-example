@@ -1,4 +1,4 @@
-package com.tensing.boot.config.security;
+package com.tensing.boot.common;
 
 import com.tensing.boot.global.filters.security.model.code.RoleCode;
 import org.springframework.security.test.context.support.WithSecurityContext;

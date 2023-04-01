@@ -1,4 +1,4 @@
-package com.tensing.boot.config.security;
+package com.tensing.boot.common;
 
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
