@@ -29,6 +29,7 @@ public class MemberDto {
 
     }
 
+    @ToString
     @FieldNameConstants
     @Builder
     @AllArgsConstructor
@@ -36,6 +37,8 @@ public class MemberDto {
     @Setter
     @Getter
     public static class MemberResponse {
+
+        private long id;
         private String username;
         private String email;
     }
