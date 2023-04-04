@@ -41,7 +41,7 @@ public class SecurityConfiguration {
         // form 기반 로그인 페이지 미사용.
         http.formLogin().disable();
 
-        // csrf 보안 미사용.
+        // csrf 보안 미사용. ( csrf 공격은 쿠키 사용시 일어나므로, 토큰 방식 사용시 불필요 )
         http.csrf().disable();
 
         // cors 필터 미사용
