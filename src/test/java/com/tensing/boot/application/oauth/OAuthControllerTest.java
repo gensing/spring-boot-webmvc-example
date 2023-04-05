@@ -46,6 +46,8 @@ public class OAuthControllerTest {
 
     private MemberDto.MemberRequest memberRequest;
 
+    private final String restDocTag = "oauth api";
+
     @BeforeEach
     void init() {
         log.info("startup");
@@ -85,7 +87,7 @@ public class OAuthControllerTest {
         var fields = new ConstrainedFields(SecurityDto.TokenRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("토큰 발급 API")
+                        .tag(restDocTag)
                         .description("토큰 발급 API")
                         .requestFields(
                                 fields.withPath(SecurityDto.TokenRequest.Fields.grantType).description("토큰 발급 방식"),

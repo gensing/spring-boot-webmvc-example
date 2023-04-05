@@ -56,6 +56,9 @@ public class PostControllerTest {
     @Autowired
     private SecurityService securityService;
 
+    private final String restDocTag = "post api";
+
+
     private String bearerToken;
 
     private PostDto.PostRequest postRequest = PostDto.PostRequest.builder()
@@ -110,7 +113,7 @@ public class PostControllerTest {
         var fields = new ConstrainedFields(PostDto.PostRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("post 생성 API")
+                        .tag(restDocTag)
                         .description("post 생성 API")
                         .requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
@@ -141,7 +144,7 @@ public class PostControllerTest {
         // docs
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("post list 조회 API")
+                        .tag(restDocTag)
                         .description("post list 조회 API")
                         .responseFields(
                                 fieldWithPath("[]." + PostDto.PostResponse.Fields.id).description("The id of the post"),
@@ -174,7 +177,7 @@ public class PostControllerTest {
         // docs
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("post 조회 API")
+                        .tag(restDocTag)
                         .description("post 조회 API")
                         .pathParameters(
                                 parameterWithName("id").description("The id of the post"))
@@ -214,7 +217,7 @@ public class PostControllerTest {
         var fields = new ConstrainedFields(PostDto.PostPutRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("post 수정 API")
+                        .tag(restDocTag)
                         .description("post 수정 API")
                         .pathParameters(
                                 parameterWithName("id").description("The id of the post"))
@@ -243,7 +246,7 @@ public class PostControllerTest {
         // docs
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("post 삭제 API")
+                        .tag(restDocTag)
                         .description("post 삭제 API")
                         .pathParameters(
                                 parameterWithName("id").description("The id of the post"))

@@ -61,6 +61,8 @@ public class MemberControllerTest {
 
     private String bearerToken;
 
+    private final String restDocTag = "member api";
+
 
     @BeforeEach
     void init() {
@@ -110,10 +112,11 @@ public class MemberControllerTest {
         var fields = new ConstrainedFields(MemberDto.MemberRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
-                        .tag("유저 api")
+                        .tag(restDocTag)
                         .description("유저 생성 API")
                         .requestFields(
-                                fields.withPath(MemberDto.MemberRequest.Fields.username).description("The username of a new member"),
+                                //.description("The username of a new member")
+                                fields.withPath(MemberDto.MemberRequest.Fields.username),
                                 fields.withPath(MemberDto.MemberRequest.Fields.email).description("The email of a new member"),
                                 fields.withPath(MemberDto.MemberRequest.Fields.password).description("The password of a new member")
                         )
@@ -148,7 +151,7 @@ public class MemberControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
 
                 resource(ResourceSnippetParameters.builder()
-                        .tag("유저 api")
+                        .tag(restDocTag)
                         .description("유저 조회 API")
                         .requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
