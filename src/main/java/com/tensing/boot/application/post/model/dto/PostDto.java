@@ -1,7 +1,5 @@
 package com.tensing.boot.application.post.model.dto;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
@@ -31,9 +29,9 @@ public class PostDto {
         private String writer;
         private String title;
         private String body;
-        @JsonSerialize(using = LocalDateTimeSerializer.class)
         private LocalDateTime createdDate;
-        @JsonSerialize(using = LocalDateTimeSerializer.class)
+        //@JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss")
+        //@JsonSerialize(using = LocalDateTimeSerializer.class)
         private LocalDateTime updatedDate;
     }
 

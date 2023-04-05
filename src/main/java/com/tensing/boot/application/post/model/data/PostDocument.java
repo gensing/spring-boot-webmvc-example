@@ -1,7 +1,5 @@
 package com.tensing.boot.application.post.model.data;
 
-import com.fasterxml.jackson.databind.annotation.JsonSerialize;
-import com.fasterxml.jackson.datatype.jsr310.ser.LocalDateTimeSerializer;
 import lombok.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
@@ -27,11 +25,9 @@ public class PostDocument {
     @Field(value = "description", type = FieldType.Text, analyzer = "korean_analyzer")
     private String description;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Field(value = "created_at", type = FieldType.Date)
     private LocalDateTime createdDate;
 
-    @JsonSerialize(using = LocalDateTimeSerializer.class)
     @Field(value = "updated_at", type = FieldType.Date)
     private LocalDateTime updatedDate;
 }
