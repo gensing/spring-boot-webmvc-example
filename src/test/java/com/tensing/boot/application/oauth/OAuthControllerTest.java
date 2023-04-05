@@ -22,6 +22,7 @@ import java.nio.charset.StandardCharsets;
 
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.epages.restdocs.apispec.Schema.schema;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -88,13 +89,16 @@ public class OAuthControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("토큰 발급 API")
                         .description("토큰 발급 API")
+                        .requestSchema(schema(SecurityDto.TokenRequest.class.getSimpleName()))
                         .requestFields(
                                 fields.withPath(SecurityDto.TokenRequest.Fields.grantType).description("토큰 발급 방식"),
                                 fields.withPath(SecurityDto.TokenRequest.Fields.username).description("login id"),
                                 fields.withPath(SecurityDto.TokenRequest.Fields.password).description("login password"),
                                 fields.withPath(SecurityDto.TokenRequest.Fields.refreshToken).description("refreshToken")
                         )
+                        .responseSchema(schema(SecurityDto.TokenResponse.class.getSimpleName()))
                         .responseFields(
                                 fieldWithPath(SecurityDto.TokenResponse.Fields.accessToken).description("accessToken"),
                                 fieldWithPath(SecurityDto.TokenResponse.Fields.refreshToken).description("refreshToken")

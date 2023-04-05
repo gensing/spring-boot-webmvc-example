@@ -2,6 +2,8 @@ package com.tensing.boot.application.member;
 
 
 import com.epages.restdocs.apispec.ResourceSnippetParameters;
+
+
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
@@ -26,6 +28,7 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import java.nio.charset.StandardCharsets;
 
+import static com.epages.restdocs.apispec.Schema.schema;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
@@ -108,27 +111,31 @@ public class MemberControllerTest {
         // then
         perform.andExpect(status().isCreated());
 
+
         // docs
         var fields = new ConstrainedFields(MemberDto.MemberRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("유저 생성 API")
                         .description("유저 생성 API")
+                        .requestSchema(schema(MemberDto.MemberRequest.class.getSimpleName()))
                         .requestFields(
-                                //.description("The username of a new member")
-                                fields.withPath(MemberDto.MemberRequest.Fields.username),
+                                fields.withPath(MemberDto.MemberRequest.Fields.username).description("The username of a new member"),
                                 fields.withPath(MemberDto.MemberRequest.Fields.email).description("The email of a new member"),
                                 fields.withPath(MemberDto.MemberRequest.Fields.password).description("The password of a new member")
                         )
                         .responseHeaders(
                                 headerWithName("Location").description("review detail resource id")
                         )
+                        .responseSchema(schema(MemberDto.MemberResponse.class.getSimpleName()))
                         .responseFields(
                                 fieldWithPath(MemberDto.MemberResponse.Fields.id).description("The id of the member"),
                                 fieldWithPath(MemberDto.MemberResponse.Fields.username).description("The username of the member"),
                                 fieldWithPath(MemberDto.MemberResponse.Fields.email).description("The email of the member")
                         )
-                        .build())
+                        .build()
+                )
         ));
     }
 
@@ -144,26 +151,29 @@ public class MemberControllerTest {
 
         // then
         perform.andExpect(status().isOk())
-                .andExpect(jsonPath(MemberDto.MemberRequest.Fields.username).value(savedMember.getUsername()))
-                .andExpect(jsonPath(MemberDto.MemberRequest.Fields.email).value(savedMember.getEmail()));
+                .andExpect(jsonPath(MemberDto.MemberResponse.Fields.username).value(savedMember.getUsername()))
+                .andExpect(jsonPath(MemberDto.MemberResponse.Fields.email).value(savedMember.getEmail()));
 
         // docs
         perform.andDo(document("{class-name}/{method-name}",
-
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("유저 조회 API")
                         .description("유저 조회 API")
                         .requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
                         )
                         .pathParameters(
-                                parameterWithName("id").description("The id of the member"))
+                                parameterWithName("id").description("The id of the member")
+                        )
+                        .responseSchema(schema(MemberDto.MemberResponse.class.getSimpleName()))
                         .responseFields(
                                 fieldWithPath(MemberDto.MemberResponse.Fields.id).description("The id of the member"),
                                 fieldWithPath(MemberDto.MemberResponse.Fields.username).description("The username of the member"),
                                 fieldWithPath(MemberDto.MemberResponse.Fields.email).description("The email of the member")
                         )
-                        .build())
+                        .build()
+                )
         ));
     }
 }

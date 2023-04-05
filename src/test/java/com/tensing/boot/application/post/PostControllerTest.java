@@ -30,6 +30,7 @@ import java.nio.charset.StandardCharsets;
 import static com.epages.restdocs.apispec.MockMvcRestDocumentationWrapper.document;
 import static com.epages.restdocs.apispec.ResourceDocumentation.headerWithName;
 import static com.epages.restdocs.apispec.ResourceDocumentation.resource;
+import static com.epages.restdocs.apispec.Schema.schema;
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.*;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
@@ -114,10 +115,12 @@ public class PostControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("post 생성 API")
                         .description("post 생성 API")
                         .requestHeaders(
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
                         )
+                        .requestSchema(schema(PostDto.PostRequest.class.getSimpleName()))
                         .requestFields(
                                 fields.withPath(PostDto.PostRequest.Fields.title).description("The title of a new post"),
                                 fields.withPath(PostDto.PostRequest.Fields.body).description("The body of a new post")
@@ -145,7 +148,9 @@ public class PostControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("post list 조회 API")
                         .description("post list 조회 API")
+                        .responseSchema(schema(PostDto.PostResponse.class.getSimpleName()))
                         .responseFields(
                                 fieldWithPath("[]." + PostDto.PostResponse.Fields.id).description("The id of the post"),
                                 fieldWithPath("[]." + PostDto.PostResponse.Fields.writer).description("The writer of the post"),
@@ -178,9 +183,12 @@ public class PostControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("post 조회 API")
                         .description("post 조회 API")
                         .pathParameters(
-                                parameterWithName("id").description("The id of the post"))
+                                parameterWithName("id").description("The id of the post")
+                        )
+                        .responseSchema(schema(PostDto.PostResponse.class.getSimpleName()))
                         .responseFields(
                                 fieldWithPath(PostDto.PostResponse.Fields.id).description("The id of the post"),
                                 fieldWithPath(PostDto.PostResponse.Fields.writer).description("The writer of the post"),
@@ -218,9 +226,12 @@ public class PostControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("post 수정 API")
                         .description("post 수정 API")
                         .pathParameters(
-                                parameterWithName("id").description("The id of the post"))
+                                parameterWithName("id").description("The id of the post")
+                        )
+                        .requestSchema(schema(PostDto.PostPutRequest.class.getSimpleName()))
                         .requestFields(
                                 fields.withPath(PostDto.PostPutRequest.Fields.title).description("The title of a update post"),
                                 fields.withPath(PostDto.PostPutRequest.Fields.body).description("The body of a update post")
@@ -247,9 +258,11 @@ public class PostControllerTest {
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag(restDocTag)
+                        .summary("post 삭제 API")
                         .description("post 삭제 API")
                         .pathParameters(
-                                parameterWithName("id").description("The id of the post"))
+                                parameterWithName("id").description("The id of the post")
+                        )
                         .build())));
     }
 
