@@ -30,8 +30,6 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class SecurityServiceImpl implements SecurityService {
 
-    public static final String BEARER_PREFIX = "Bearer ";
-
     private final MemberService memberService;
     private final TokenProvider accessTokenProvider;
     private final TokenProvider refreshTokenProvider;
