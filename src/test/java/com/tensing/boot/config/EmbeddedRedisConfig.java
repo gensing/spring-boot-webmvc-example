@@ -21,7 +21,13 @@ public class EmbeddedRedisConfig {
 
     @PostConstruct
     public void postConstruct() {
-        redisServer.start();
+
+        try {
+            redisServer.start();
+        }catch (Exception e){
+
+        }
+
     }
 
     @PreDestroy
