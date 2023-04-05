@@ -37,7 +37,7 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     @Override
     public List<PostDto.PostResponse> getList(Pageable pageable) {
-        final var postEntityList = postEntityRepository.findAll();
+        final var postEntityList = postEntityRepository.findAll(pageable);
         return postEntityList.stream().map(postMapper::toPostResponse).toList();
     }
 
