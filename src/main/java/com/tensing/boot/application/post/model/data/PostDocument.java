@@ -1,11 +1,13 @@
 package com.tensing.boot.application.post.model.data;
 
 import lombok.*;
+import lombok.experimental.FieldNameConstants;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.elasticsearch.annotations.*;
 
 import java.time.LocalDateTime;
 
+@FieldNameConstants
 @Getter
 @Builder
 @AllArgsConstructor
