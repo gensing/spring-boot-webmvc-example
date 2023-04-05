@@ -50,13 +50,19 @@ Content-Type: application/json
     }
 }
 
+###
+
 // index 정보 확인
 GET http://localhost:9200/post
 Content-Type: application/json
 
+###
+
 // 인덱스 삭제
 DELETE http://localhost:9200/post
 Content-Type: application/json
+
+###
 
 // doc 추가
 PUT http://localhost:9200/post/_doc/1
@@ -68,6 +74,8 @@ Content-Type: application/json
   "description": "사과"
 }
 
+###
+
 // 검색
 GET http://localhost:9200/post/_search
 Content-Type: application/json
@@ -76,15 +84,19 @@ Content-Type: application/json
   "query": { "match_all":{ }  }
 }
 
+###
+
 GET http://localhost:9200/post/_search
 Content-Type: application/json
-
 {
   "query": {
       "bool": {
          "must": [
-            { "match": { "title": "사과" }}
+            { "match": { "title": "나무" } },
+            { "match": { "description": "나무" } }
          ]
       }
    }
 }
+
+###
