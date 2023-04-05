@@ -6,6 +6,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.common.AcceptanceTestExecutionListener;
+import com.tensing.boot.common.ConstrainedFields;
 import com.tensing.boot.global.filters.security.Const;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import com.tensing.boot.global.filters.security.service.SecurityService;
@@ -106,14 +107,15 @@ public class MemberControllerTest {
         perform.andExpect(status().isCreated());
 
         // docs
+        var fields = new ConstrainedFields(MemberDto.MemberRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag("유저 api")
                         .description("유저 생성 API")
                         .requestFields(
-                                fieldWithPath(MemberDto.MemberRequest.Fields.username).description("The username of a new member"),
-                                fieldWithPath(MemberDto.MemberRequest.Fields.email).description("The email of a new member"),
-                                fieldWithPath(MemberDto.MemberRequest.Fields.password).description("The password of a new member")
+                                fields.withPath(MemberDto.MemberRequest.Fields.username).description("The username of a new member"),
+                                fields.withPath(MemberDto.MemberRequest.Fields.email).description("The email of a new member"),
+                                fields.withPath(MemberDto.MemberRequest.Fields.password).description("The password of a new member")
                         )
                         .responseHeaders(
                                 headerWithName("Location").description("review detail resource id")

@@ -7,6 +7,7 @@ import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.application.post.model.dto.PostDto;
 import com.tensing.boot.application.post.service.PostService;
+import com.tensing.boot.common.ConstrainedFields;
 import com.tensing.boot.global.filters.security.Const;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import com.tensing.boot.global.filters.security.service.SecurityService;
@@ -106,6 +107,7 @@ public class PostControllerTest {
         perform.andExpect(status().isCreated());
 
         // docs
+        var fields = new ConstrainedFields(PostDto.PostRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag("post 생성 API")
@@ -114,8 +116,8 @@ public class PostControllerTest {
                                 headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
                         )
                         .requestFields(
-                                fieldWithPath(PostDto.PostRequest.Fields.title).description("The title of a new post"),
-                                fieldWithPath(PostDto.PostRequest.Fields.body).description("The body of a new post")
+                                fields.withPath(PostDto.PostRequest.Fields.title).description("The title of a new post"),
+                                fields.withPath(PostDto.PostRequest.Fields.body).description("The body of a new post")
                         )
                         .responseHeaders(
                                 headerWithName("Location").description("review detail resource id")
@@ -209,12 +211,17 @@ public class PostControllerTest {
         perform.andExpect(status().isOk());
 
         // docs
+        var fields = new ConstrainedFields(PostDto.PostPutRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag("post 수정 API")
                         .description("post 수정 API")
                         .pathParameters(
                                 parameterWithName("id").description("The id of the post"))
+                        .requestFields(
+                                fields.withPath(PostDto.PostPutRequest.Fields.title).description("The title of a update post"),
+                                fields.withPath(PostDto.PostPutRequest.Fields.body).description("The body of a update post")
+                        )
                         .build())
         ));
     }

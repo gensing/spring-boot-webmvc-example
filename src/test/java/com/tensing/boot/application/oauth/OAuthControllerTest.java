@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.common.AcceptanceTestExecutionListener;
+import com.tensing.boot.common.ConstrainedFields;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
@@ -81,15 +82,16 @@ public class OAuthControllerTest {
                 .andExpect(jsonPath(SecurityDto.TokenResponse.Fields.refreshToken).exists());
 
         // docs
+        var fields = new ConstrainedFields(SecurityDto.TokenRequest.class);
         perform.andDo(document("{class-name}/{method-name}",
                 resource(ResourceSnippetParameters.builder()
                         .tag("토큰 발급 API")
                         .description("토큰 발급 API")
                         .requestFields(
-                                fieldWithPath(SecurityDto.TokenRequest.Fields.grantType).description("토큰 발급 방식"),
-                                fieldWithPath(SecurityDto.TokenRequest.Fields.username).description("login id"),
-                                fieldWithPath(SecurityDto.TokenRequest.Fields.password).description("login password"),
-                                fieldWithPath(SecurityDto.TokenRequest.Fields.refreshToken).description("refreshToken")
+                                fields.withPath(SecurityDto.TokenRequest.Fields.grantType).description("토큰 발급 방식"),
+                                fields.withPath(SecurityDto.TokenRequest.Fields.username).description("login id"),
+                                fields.withPath(SecurityDto.TokenRequest.Fields.password).description("login password"),
+                                fields.withPath(SecurityDto.TokenRequest.Fields.refreshToken).description("refreshToken")
                         )
                         .responseFields(
                                 fieldWithPath(SecurityDto.TokenResponse.Fields.accessToken).description("accessToken"),
