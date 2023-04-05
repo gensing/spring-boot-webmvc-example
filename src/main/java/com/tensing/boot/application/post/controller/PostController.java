@@ -9,6 +9,7 @@ import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
@@ -30,13 +31,14 @@ public class PostController {
 
     @GetMapping("/_search")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDto.PostResponse> search(SearchCondition searchCondition, @PageableDefault(page = 0, size = 10, sort = {"createdAt"}) Pageable pageable) {
+    public List<PostDto.PostResponse> search(SearchCondition searchCondition, @PageableDefault(page = 0, size = 10) Pageable pageable) {
         return postService.search(searchCondition, pageable);
     }
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDto.PostResponse> getList(@PageableDefault(page = 0, size = 10, sort = {"createdAt"}, direction = Sort.Direction.DESC) Pageable pageable) {
+    public List<PostDto.PostResponse> getList(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable) {
+        //PageRequest.of(page, size, Sort.Direction.DESC)
         return postService.getList(pageable);
     }
 
