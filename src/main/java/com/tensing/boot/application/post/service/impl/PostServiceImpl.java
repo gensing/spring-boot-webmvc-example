@@ -37,15 +37,15 @@ public class PostServiceImpl implements PostService {
     @Transactional(readOnly = true)
     @Override
     public List<PostDto.PostResponse> getList(Pageable pageable) {
-        final var postEntityList = postEntityRepository.findAll(pageable);
-        return postEntityList.stream().map(postMapper::toPostResponse).toList();
+        final var postEntityList = postEntityRepository.findList(pageable);
+        return postEntityList;
     }
 
     @Transactional(readOnly = true)
     @Override
     public PostDto.PostResponse get(long postId) {
-        final var postEntity = postEntityRepository.findById(postId).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_DATA));
-        return postMapper.toPostResponse(postEntity);
+        final var postEntity = postEntityRepository.findOne(postId).orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_DATA));
+        return postEntity;
     }
 
     @Transactional
