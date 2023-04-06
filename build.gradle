@@ -82,6 +82,7 @@ dependencies {
     implementation 'org.mariadb.jdbc:mariadb-java-client:3.1.2'
 
     // Querydsl dependencies - querydsl-apt : compile 시 @Entity 찾아 QClass 을 생성해 주는 라이브러리, compileJava 실행해서 생성
+    // 생겨난 QClass 의 java 버전 설정을 ide 에서 따로 잡아줘야하는 경우도 있는듯 하다...(현재 사용 17버전 사용으로 하여야 ide 에서 javax를 찾음)
     implementation 'com.querydsl:querydsl-jpa:5.0.0:jakarta'
     annotationProcessor "com.querydsl:querydsl-apt:5.0.0:jakarta"
     annotationProcessor "jakarta.annotation:jakarta.annotation-api"
@@ -115,7 +116,7 @@ dependencies {
     // spring security test
     testImplementation 'org.springframework.security:spring-security-test'
 
-    // doc dependency , epages 1.6 버전은 spring-restdocs-mockmvc 기본 내장인데, 1.7은 포함을 안하고 있다... ( boot 3은 1.7 버전 사용 )
+    // doc dependency , epages 0.16 버전은 spring-restdocs-mockmvc 기본 내장인데, 0.17 은 포함을 안하고 있다... ( boot 3은 1.7 버전 사용 )
     testImplementation 'org.springframework.restdocs:spring-restdocs-mockmvc'
     testImplementation "com.epages:restdocs-api-spec-mockmvc:${restdocsApiSpecVersion}"
 
