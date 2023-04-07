@@ -15,6 +15,7 @@ import com.tensing.boot.global.filters.security.service.SecurityService;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
+import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.restdocs.AutoConfigureRestDocs;
@@ -36,6 +37,7 @@ import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuild
 import static org.springframework.restdocs.mockmvc.RestDocumentationRequestBuilders.post;
 import static org.springframework.restdocs.payload.PayloadDocumentation.fieldWithPath;
 import static org.springframework.restdocs.request.RequestDocumentation.parameterWithName;
+import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
@@ -60,11 +62,11 @@ public class MemberControllerTest {
     @Autowired
     private SecurityService securityService;
 
-    private MemberDto.MemberResponse savedMember;
+    private final String REST_DOC_TAG = "member api";
 
     private String bearerToken;
 
-    private final String restDocTag = "member api";
+    private MemberDto.MemberResponse savedMember;
 
 
     @BeforeEach
@@ -79,8 +81,6 @@ public class MemberControllerTest {
 
         savedMember = memberService.createMember(memberRequest);
 
-        log.info(savedMember.toString());
-
         var tokenRequest = SecurityDto.TokenRequest.builder()
                 .grantType(SecurityDto.GranType.ISSUE)
                 .username(memberRequest.getUsername())
@@ -91,89 +91,98 @@ public class MemberControllerTest {
 
     }
 
-    @Test
+    @Nested
     @DisplayName("유저 생성")
-    void postTest() throws Exception {
+    class MemberGenerateTest {
+        @Test
+        void generate_success() throws Exception {
 
-        // given
-        final var body = objectMapper.writeValueAsString(MemberDto.MemberRequest.builder()
-                .username("test12345")
-                .email("test12345@test.test")
-                .password("test12345@T")
-                .build());
+            // given
+            final var body = objectMapper.writeValueAsString(MemberDto.MemberRequest.builder()
+                    .username("test12345")
+                    .email("test12345@test.test")
+                    .password("test12345@T")
+                    .build());
 
-        // when
-        var perform = mockMvc.perform(post("/api/members")
-                .contentType(MediaType.APPLICATION_JSON)
-                .characterEncoding(StandardCharsets.UTF_8)
-                .content(body));
+            // when
+            var perform = mockMvc.perform(post("/api/members")
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .characterEncoding(StandardCharsets.UTF_8)
+                            .content(body))
+                    .andDo(print());
 
-        // then
-        perform.andExpect(status().isCreated());
+            // then
+            perform.andExpect(status().isCreated());
 
 
-        // docs
-        var fields = new ConstrainedFields(MemberDto.MemberRequest.class);
-        perform.andDo(document("{class-name}/{method-name}",
-                resource(ResourceSnippetParameters.builder()
-                        .tag(restDocTag)
-                        .summary("유저 생성 API")
-                        .description("유저 생성 API")
-                        .requestSchema(schema(MemberDto.MemberRequest.class.getSimpleName()))
-                        .requestFields(
-                                fields.withPath(MemberDto.MemberRequest.Fields.username).description("The username of a new member"),
-                                fields.withPath(MemberDto.MemberRequest.Fields.email).description("The email of a new member"),
-                                fields.withPath(MemberDto.MemberRequest.Fields.password).description("The password of a new member")
-                        )
-                        .responseHeaders(
-                                headerWithName("Location").description("review detail resource id")
-                        )
-                        .responseSchema(schema(MemberDto.MemberResponse.class.getSimpleName()))
-                        .responseFields(
-                                fieldWithPath(MemberDto.MemberResponse.Fields.id).description("The id of the member"),
-                                fieldWithPath(MemberDto.MemberResponse.Fields.username).description("The username of the member"),
-                                fieldWithPath(MemberDto.MemberResponse.Fields.email).description("The email of the member")
-                        )
-                        .build()
-                )
-        ));
+            // docs
+            var fields = new ConstrainedFields(MemberDto.MemberRequest.class);
+            perform.andDo(document("{class-name}/{method-name}",
+                    resource(ResourceSnippetParameters.builder()
+                            .tag(REST_DOC_TAG)
+                            .summary("유저 생성 API")
+                            .description("유저 생성 API")
+                            .requestSchema(schema(MemberDto.MemberRequest.class.getSimpleName()))
+                            .requestFields(
+                                    fields.withPath(MemberDto.MemberRequest.Fields.username).description("The username of a new member"),
+                                    fields.withPath(MemberDto.MemberRequest.Fields.email).description("The email of a new member"),
+                                    fields.withPath(MemberDto.MemberRequest.Fields.password).description("The password of a new member")
+                            )
+                            .responseHeaders(
+                                    headerWithName("Location").description("review detail resource id")
+                            )
+                            .responseSchema(schema(MemberDto.MemberResponse.class.getSimpleName()))
+                            .responseFields(
+                                    fieldWithPath(MemberDto.MemberResponse.Fields.id).description("The id of the member"),
+                                    fieldWithPath(MemberDto.MemberResponse.Fields.username).description("The username of the member"),
+                                    fieldWithPath(MemberDto.MemberResponse.Fields.email).description("The email of the member")
+                            )
+                            .build()
+                    )
+            ));
+        }
     }
 
-    @Test
     @DisplayName("유저 정보 확인")
-    void getTest() throws Exception {
+    class MemberGetTest {
+        @Test
+        void get_success() throws Exception {
 
-        // when
-        var perform = mockMvc.perform(get("/api/members/{id}", savedMember.getId())
-                .contentType(MediaType.APPLICATION_JSON)
-                .header(HttpHeaders.AUTHORIZATION, bearerToken)
-                .characterEncoding(StandardCharsets.UTF_8));
+            // when
+            var perform = mockMvc.perform(get("/api/members/{id}", savedMember.getId())
+                            .contentType(MediaType.APPLICATION_JSON)
+                            .header(HttpHeaders.AUTHORIZATION, bearerToken)
+                            .characterEncoding(StandardCharsets.UTF_8))
+                    .andDo(print());
 
-        // then
-        perform.andExpect(status().isOk())
-                .andExpect(jsonPath(MemberDto.MemberResponse.Fields.username).value(savedMember.getUsername()))
-                .andExpect(jsonPath(MemberDto.MemberResponse.Fields.email).value(savedMember.getEmail()));
+            // then
+            perform.andExpect(status().isOk())
+                    .andExpect(jsonPath(MemberDto.MemberResponse.Fields.username).value(savedMember.getUsername()))
+                    .andExpect(jsonPath(MemberDto.MemberResponse.Fields.email).value(savedMember.getEmail()));
 
-        // docs
-        perform.andDo(document("{class-name}/{method-name}",
-                resource(ResourceSnippetParameters.builder()
-                        .tag(restDocTag)
-                        .summary("유저 조회 API")
-                        .description("유저 조회 API")
-                        .requestHeaders(
-                                headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
-                        )
-                        .pathParameters(
-                                parameterWithName("id").description("The id of the member")
-                        )
-                        .responseSchema(schema(MemberDto.MemberResponse.class.getSimpleName()))
-                        .responseFields(
-                                fieldWithPath(MemberDto.MemberResponse.Fields.id).description("The id of the member"),
-                                fieldWithPath(MemberDto.MemberResponse.Fields.username).description("The username of the member"),
-                                fieldWithPath(MemberDto.MemberResponse.Fields.email).description("The email of the member")
-                        )
-                        .build()
-                )
-        ));
+            // docs
+            perform.andDo(document("{class-name}/{method-name}",
+                    resource(ResourceSnippetParameters.builder()
+                            .tag(REST_DOC_TAG)
+                            .summary("유저 조회 API")
+                            .description("유저 조회 API")
+                            .requestHeaders(
+                                    headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
+                            )
+                            .pathParameters(
+                                    parameterWithName("id").description("The id of the member")
+                            )
+                            .responseSchema(schema(MemberDto.MemberResponse.class.getSimpleName()))
+                            .responseFields(
+                                    fieldWithPath(MemberDto.MemberResponse.Fields.id).description("The id of the member"),
+                                    fieldWithPath(MemberDto.MemberResponse.Fields.username).description("The username of the member"),
+                                    fieldWithPath(MemberDto.MemberResponse.Fields.email).description("The email of the member")
+                            )
+                            .build()
+                    )
+            ));
+        }
     }
+
+
 }
