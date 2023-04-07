@@ -24,6 +24,7 @@ spring:
 logging:
   level:
     root: INFO
+    org.apache.kafka: error
 tensing:
   jwt:
     accessToken:
