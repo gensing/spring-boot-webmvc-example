@@ -94,7 +94,7 @@ public class SecurityServiceImpl implements SecurityService {
         return bearerToken.substring(7);
     }
 
-    private SecurityDto.TokenResponse getToken(String username, String password) {
+    public SecurityDto.TokenResponse getToken(String username, String password) {
 
         final var memberEntity = Optional.ofNullable(memberService.findMember(username, password))
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_MEMBER));
@@ -122,7 +122,7 @@ public class SecurityServiceImpl implements SecurityService {
                 .build();
     }
 
-    private SecurityDto.TokenResponse getToken(final String refreshToken) {
+    public SecurityDto.TokenResponse getToken(final String refreshToken) {
 
         final var claim = refreshTokenProvider.decodeToken(refreshToken);
 

@@ -13,7 +13,7 @@ public interface PostService {
 
     PostDto.PostResponse get(long postId);
 
-    long insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo);
+    PostDto.PostResponse insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo);
 
     PostDto.PostResponse update(long postId, PostDto.PostPutRequest postPutRequest, SecurityDto.UserInfo sessionInfo);
 

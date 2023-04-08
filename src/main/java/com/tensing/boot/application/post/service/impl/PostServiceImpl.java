@@ -32,10 +32,10 @@ public class PostServiceImpl implements PostService {
 
     @Transactional
     @Override
-    public long insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo) {
+    public PostDto.PostResponse insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo) {
         final var requestPostEntity = postMapper.toPost(postRequest, sessionInfo.getId());
         final var savedPostEntity = postEntityRepository.save(requestPostEntity);
-        return savedPostEntity.getId();
+        return postMapper.toPostResponse(savedPostEntity);
     }
 
     @Transactional(readOnly = true)
@@ -72,9 +72,10 @@ public class PostServiceImpl implements PostService {
             log.info("invalid requestId - sessionId: {}, request id: {}", sessionInfo.getId(), savedPostEntity.getMemberEntity().getId());
             throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
         }
+
         // dirty check vs save or queryDsl ??
         savedPostEntity.update(postMapper.toPost(postPutRequest));
-        
+
         return postMapper.toPostResponse(savedPostEntity);
     }
 

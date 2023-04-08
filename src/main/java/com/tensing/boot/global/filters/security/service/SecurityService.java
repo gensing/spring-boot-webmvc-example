@@ -8,6 +8,10 @@ public interface SecurityService {
     // 발급
     SecurityDto.TokenResponse getToken(SecurityDto.TokenRequest loginRequest);
 
+    SecurityDto.TokenResponse getToken(String username, String password);
+
+    SecurityDto.TokenResponse getToken(String refreshToken);
+
     // 검증
     Authentication getAuthentication(String accessToken);
 

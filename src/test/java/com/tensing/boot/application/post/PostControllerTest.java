@@ -48,24 +48,22 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @TestExecutionListeners(value = {AcceptanceTestExecutionListener.class}, mergeMode = TestExecutionListeners.MergeMode.MERGE_WITH_DEFAULTS)
 public class PostControllerTest {
 
+    private final String REST_DOC_TAG = "post api";
+
     @Autowired
     private MockMvc mockMvc;
     @Autowired
     private ObjectMapper objectMapper;
     @Autowired
-    private PostService postService;
-    @Autowired
     private MemberService memberService;
     @Autowired
     private SecurityService securityService;
-
-    private final String REST_DOC_TAG = "post api";
+    @Autowired
+    private PostService postService;
 
     private String bearerToken;
 
-    private PostDto.PostRequest postRequest;
-
-    private long postId;
+    private PostDto.PostResponse newPost;
 
     @BeforeEach
     void init() {
@@ -79,62 +77,16 @@ public class PostControllerTest {
 
         var memberId = memberService.createMember(memberRequest).getId();
 
-        var tokenRequest = SecurityDto.TokenRequest.builder()
-                .grantType(SecurityDto.GranType.ISSUE)
-                .username(memberRequest.getUsername())
-                .password(memberRequest.getPassword())
-                .build();
+        this.bearerToken = Const.BEARER_PREFIX + securityService.getToken(memberRequest.getUsername(), memberRequest.getPassword()).getAccessToken();
 
-        this.bearerToken = Const.BEARER_PREFIX + securityService.getToken(tokenRequest).getAccessToken();
-
-        this.postRequest = PostDto.PostRequest.builder()
+        var postRequest = PostDto.PostRequest.builder()
                 .title("test title 1")
                 .body("test body 1")
                 .build();
 
-        this.postId = postService.insert(postRequest, SecurityDto.UserInfo.builder().id(memberId).build());
+        this.newPost = postService.insert(postRequest, SecurityDto.UserInfo.builder().id(memberId).build());
     }
 
-    @Nested
-    @DisplayName("post 조회")
-    class PostGetTest {
-        @Test
-        void get_success() throws Exception {
-
-            // when
-            var perform = mockMvc.perform(get("/api/posts/{id}", postId)
-                    .contentType(MediaType.APPLICATION_JSON)
-                    .characterEncoding(StandardCharsets.UTF_8)
-            ).andDo(print());
-
-            // then
-            perform.andExpect(status().isOk())
-                    .andExpect(jsonPath(PostDto.PostResponse.Fields.id).value(postId))
-                    .andExpect(jsonPath(PostDto.PostResponse.Fields.title).value(postRequest.getTitle()))
-                    .andExpect(jsonPath(PostDto.PostResponse.Fields.body).value(postRequest.getBody()));
-
-            // docs
-            perform.andDo(document("{class-name}/{method-name}",
-                    resource(ResourceSnippetParameters.builder()
-                            .tag(REST_DOC_TAG)
-                            .summary("post 조회 API")
-                            .description("post 조회 API")
-                            .pathParameters(
-                                    parameterWithName("id").description("The id of the post")
-                            )
-                            .responseSchema(schema(PostDto.PostResponse.class.getSimpleName()))
-                            .responseFields(
-                                    fieldWithPath(PostDto.PostResponse.Fields.id).description("The id of the post"),
-                                    fieldWithPath(PostDto.PostResponse.Fields.writer).description("The writer of the post"),
-                                    fieldWithPath(PostDto.PostResponse.Fields.title).description("The title of the post"),
-                                    fieldWithPath(PostDto.PostResponse.Fields.body).description("The body of the post"),
-                                    fieldWithPath(PostDto.PostResponse.Fields.createdDate).description("The createdDate of the post"),
-                                    fieldWithPath(PostDto.PostResponse.Fields.updatedDate).description("The updatedDate of the post")
-                            )
-                            .build())
-            ));
-        }
-    }
 
     @Nested
     @DisplayName("post list 조회")
@@ -172,14 +124,56 @@ public class PostControllerTest {
     }
 
     @Nested
+    @DisplayName("post 조회")
+    class PostGetTest {
+        @Test
+        void get_success() throws Exception {
+
+            // when
+            var perform = mockMvc.perform(get("/api/posts/{id}", newPost.getId())
+                    .contentType(MediaType.APPLICATION_JSON)
+                    .characterEncoding(StandardCharsets.UTF_8)
+            ).andDo(print());
+
+            // then
+            perform.andExpect(status().isOk())
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.id).value(newPost.getId()))
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.title).value(newPost.getTitle()))
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.body).value(newPost.getBody()));
+
+            // docs
+            perform.andDo(document("{class-name}/{method-name}",
+                    resource(ResourceSnippetParameters.builder()
+                            .tag(REST_DOC_TAG)
+                            .summary("post 조회 API")
+                            .description("post 조회 API")
+                            .pathParameters(
+                                    parameterWithName("id").description("The id of the post")
+                            )
+                            .responseSchema(schema(PostDto.PostResponse.class.getSimpleName()))
+                            .responseFields(
+                                    fieldWithPath(PostDto.PostResponse.Fields.id).description("The id of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.writer).description("The writer of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.title).description("The title of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.body).description("The body of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.createdDate).description("The createdDate of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.updatedDate).description("The updatedDate of the post")
+                            )
+                            .build())
+            ));
+        }
+    }
+
+    @Nested
     @DisplayName("post 생성")
     class PostCreateTest {
         @Test
         void create_success() throws Exception {
 
-            // when
+            // given
             var postRequest = PostDto.PostRequest.builder().title("test title 1").body("test body 1").build();
 
+            // when
             var perform = mockMvc.perform(post("/api/posts")
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8)
@@ -188,7 +182,10 @@ public class PostControllerTest {
             ).andDo(print());
 
             // then
-            perform.andExpect(status().isCreated());
+            perform.andExpect(status().isCreated())
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.id).exists())
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.title).value(postRequest.getTitle()))
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.body).value(postRequest.getBody()));
 
             // docs
             var fields = new ConstrainedFields(PostDto.PostRequest.class);
@@ -208,6 +205,15 @@ public class PostControllerTest {
                             .responseHeaders(
                                     headerWithName("Location").description("review detail resource id")
                             )
+                            .responseSchema(schema(PostDto.PostResponse.class.getSimpleName()))
+                            .responseFields(
+                                    fieldWithPath(PostDto.PostResponse.Fields.id).description("The id of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.writer).description("The writer of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.title).description("The title of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.body).description("The body of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.createdDate).description("The createdDate of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.updatedDate).description("The updatedDate of the post")
+                            )
                             .build())
             ));
         }
@@ -219,13 +225,14 @@ public class PostControllerTest {
         @Test
         void put_success() throws Exception {
 
-            // when
+            // given
             var postRequest = PostDto.PostPutRequest.builder()
                     .title("test update title 1")
                     .body("test update body 1")
                     .build();
 
-            var perform = mockMvc.perform(put("/api/posts/{id}", postId)
+            // when
+            var perform = mockMvc.perform(put("/api/posts/{id}", newPost.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8)
                     .header(HttpHeaders.AUTHORIZATION, bearerToken)
@@ -233,7 +240,10 @@ public class PostControllerTest {
             ).andDo(print());
 
             // then
-            perform.andExpect(status().isOk());
+            perform.andExpect(status().isOk())
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.id).value(newPost.getId()))
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.title).value(postRequest.getTitle()))
+                    .andExpect(jsonPath(PostDto.PostResponse.Fields.body).value(postRequest.getBody()));
 
             // docs
             var fields = new ConstrainedFields(PostDto.PostPutRequest.class);
@@ -242,6 +252,9 @@ public class PostControllerTest {
                             .tag(REST_DOC_TAG)
                             .summary("post 수정 API")
                             .description("post 수정 API")
+                            .requestHeaders(
+                                    headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
+                            )
                             .pathParameters(
                                     parameterWithName("id").description("The id of the post")
                             )
@@ -249,6 +262,15 @@ public class PostControllerTest {
                             .requestFields(
                                     fields.withPath(PostDto.PostPutRequest.Fields.title).description("The title of a update post"),
                                     fields.withPath(PostDto.PostPutRequest.Fields.body).description("The body of a update post")
+                            )
+                            .responseSchema(schema(PostDto.PostResponse.class.getSimpleName()))
+                            .responseFields(
+                                    fieldWithPath(PostDto.PostResponse.Fields.id).description("The id of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.writer).description("The writer of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.title).description("The title of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.body).description("The body of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.createdDate).description("The createdDate of the post"),
+                                    fieldWithPath(PostDto.PostResponse.Fields.updatedDate).description("The updatedDate of the post")
                             )
                             .build())
             ));
@@ -262,7 +284,7 @@ public class PostControllerTest {
         void delete_success() throws Exception {
 
             // when
-            var perform = mockMvc.perform(delete("/api/posts/{id}", postId)
+            var perform = mockMvc.perform(delete("/api/posts/{id}", newPost.getId())
                     .contentType(MediaType.APPLICATION_JSON)
                     .characterEncoding(StandardCharsets.UTF_8)
                     .header(HttpHeaders.AUTHORIZATION, bearerToken)
@@ -277,6 +299,9 @@ public class PostControllerTest {
                             .tag(REST_DOC_TAG)
                             .summary("post 삭제 API")
                             .description("post 삭제 API")
+                            .requestHeaders(
+                                    headerWithName(HttpHeaders.AUTHORIZATION).description("jwt token")
+                            )
                             .pathParameters(
                                     parameterWithName("id").description("The id of the post")
                             )
