@@ -15,7 +15,7 @@ public interface PostService {
 
     long insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo);
 
-    void update(long postId, PostDto.PostPutRequest postPutRequest, SecurityDto.UserInfo sessionInfo);
+    PostDto.PostResponse update(long postId, PostDto.PostPutRequest postPutRequest, SecurityDto.UserInfo sessionInfo);
 
     void delete(long postId, SecurityDto.UserInfo sessionInfo);
 

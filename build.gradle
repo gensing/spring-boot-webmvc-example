@@ -48,6 +48,9 @@ dependencies {
     // spring security dependency
     implementation 'org.springframework.boot:spring-boot-starter-security'
 
+    // spring cache dependency
+    implementation 'org.springframework.boot:spring-boot-starter-cache'
+
     // websocket dependency
     implementation 'org.springframework.boot:spring-boot-starter-websocket'
 

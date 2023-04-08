@@ -11,6 +11,9 @@ import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
 import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.cache.annotation.CacheEvict;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -27,6 +30,14 @@ public class PostServiceImpl implements PostService {
     private final PostMapper postMapper;
 
 
+    @Transactional
+    @Override
+    public long insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo) {
+        final var requestPostEntity = postMapper.toPost(postRequest, sessionInfo.getId());
+        final var savedPostEntity = postEntityRepository.save(requestPostEntity);
+        return savedPostEntity.getId();
+    }
+
     @Transactional(readOnly = true)
     @Override
     public List<PostDto.PostResponse> search(SearchCondition searchCondition, Pageable pageable) {
@@ -41,6 +52,7 @@ public class PostServiceImpl implements PostService {
         return postEntityList;
     }
 
+    @Cacheable(value = "postResponseCache", key = "#postId")
     @Transactional(readOnly = true)
     @Override
     public PostDto.PostResponse get(long postId) {
@@ -48,17 +60,10 @@ public class PostServiceImpl implements PostService {
         return postEntity;
     }
 
+    @CachePut(value = "postResponseCache", key = "#postId")
     @Transactional
     @Override
-    public long insert(PostDto.PostRequest postRequest, SecurityDto.UserInfo sessionInfo) {
-        final var requestPostEntity = postMapper.toPost(postRequest, sessionInfo.getId());
-        final var savedPostEntity = postEntityRepository.save(requestPostEntity);
-        return savedPostEntity.getId();
-    }
-
-    @Transactional
-    @Override
-    public void update(long postId, PostDto.PostPutRequest postPutRequest, SecurityDto.UserInfo sessionInfo) {
+    public PostDto.PostResponse update(long postId, PostDto.PostPutRequest postPutRequest, SecurityDto.UserInfo sessionInfo) {
 
         final var savedPostEntity = postEntityRepository.findById(postId)
                 .orElseThrow(() -> new BusinessException(ErrorCode.NOT_FOUND_DATA));
@@ -67,11 +72,13 @@ public class PostServiceImpl implements PostService {
             log.info("invalid requestId - sessionId: {}, request id: {}", sessionInfo.getId(), savedPostEntity.getMemberEntity().getId());
             throw new BusinessException(ErrorCode.HANDLE_ACCESS_DENIED);
         }
-
         // dirty check vs save or queryDsl ??
         savedPostEntity.update(postMapper.toPost(postPutRequest));
+        
+        return postMapper.toPostResponse(savedPostEntity);
     }
 
+    @CacheEvict(value = "postResponseCache", key = "#postId")
     @Transactional
     @Override
     public void delete(long postId, SecurityDto.UserInfo sessionInfo) {
