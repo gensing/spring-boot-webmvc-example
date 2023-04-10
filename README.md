@@ -28,9 +28,9 @@ $ java -jar ./build/libs/boot-0.0.1-SNAPSHOT.jar --spring.profiles.active=local
 - Spring Boot Starter Web
 - Spring Boot Starter Security
 - Spring Boot Starter Cache
-- Spring Data Starter JPA
-- Spring Data Starter Redis
-- Spring Data Starter Elasticsearch
+- Spring Boot Starter Data JPA
+- Spring Boot Starter Data Redis
+- Spring Boot Starter Data Elasticsearch
 - Spring REST Docs
 - ePages Rest Docs Api Spec
 - Querydsl
