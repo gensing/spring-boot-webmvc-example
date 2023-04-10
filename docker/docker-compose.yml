@@ -44,6 +44,7 @@ services:
       - network.host=0.0.0.0
       - http.cors.enabled=false
       - http.cors.allow-origin=/https?:\/\/localhost(:[0-9]+)?/
+      - ES_JAVA_OPTS=-Xms512m -Xmx512m
     ports:
       - "9200:9200"
       - "9300:9300"

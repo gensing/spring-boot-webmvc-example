@@ -33,6 +33,7 @@ public class ElasticTestContainer extends ElasticsearchConfiguration {
                 .withExposedPorts(9200, 9300)
                 .withClasspathResourceMapping("/docker/elasticsearch/config/dic", "/usr/share/elasticsearch/config/dic", BindMode.READ_ONLY)
                 .withEnv("discovery.type", "single-node")
+                .withEnv("ES_JAVA_OPTS", "-Xms512m -Xmx512m")
                 .withReuse(true) // 컨테이너 리로드 X
         ;
 
