@@ -1,14 +1,16 @@
-package com.tensing.boot.common.modules;
+package com.tensing.boot.global.filters.security.provider;
 
-import io.jsonwebtoken.Claims;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
+import com.tensing.boot.global.advice.exception.exception.BusinessException;
+import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
+import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
+import lombok.extern.slf4j.Slf4j;
 
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Date;
 
+@Slf4j
 public class TokenProvider {
     private final int jwtExpirationInMs;
     private final SignatureAlgorithm signatureAlgorithm;
@@ -40,7 +42,25 @@ public class TokenProvider {
     }
 
     public Claims decodeToken(String token) {
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+
+        try {
+            return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody();
+        } catch (MalformedJwtException ex) {
+            log.info("Invalid JWT token");
+            throw new BusinessException(ErrorCode.INVALID_JWT);
+        } catch (ExpiredJwtException ex) {
+            log.info("Expired JWT token");
+            throw new BusinessException(ErrorCode.INVALID_JWT);
+        } catch (UnsupportedJwtException ex) {
+            log.info("Unsupported JWT token");
+            throw new BusinessException(ErrorCode.INVALID_JWT);
+        } catch (IllegalArgumentException ex) {
+            log.info("JWT claims string is empty.");
+            throw new BusinessException(ErrorCode.INVALID_JWT);
+        } catch (Exception e) {
+            throw new BusinessException(ErrorCode.INVALID_JWT);
+        }
+
     }
 
 }

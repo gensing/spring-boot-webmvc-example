@@ -3,7 +3,7 @@ package com.tensing.boot.global.filters.security.impl;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.global.filters.security.Const;
 import com.tensing.boot.global.filters.security.dao.RefreshTokenCashRepository;
-import com.tensing.boot.common.modules.TokenProvider;
+import com.tensing.boot.global.filters.security.provider.TokenProvider;
 import com.tensing.boot.global.advice.exception.exception.BusinessException;
 import com.tensing.boot.global.advice.exception.model.code.ErrorCode;
 import com.tensing.boot.global.filters.security.model.code.RoleCode;
@@ -48,25 +48,7 @@ public class SecurityServiceImpl implements SecurityService {
     @Override
     public Authentication getAuthentication(String accessToken) {
 
-        final Claims claims;
-
-        try {
-            claims = accessTokenProvider.decodeToken(accessToken);
-        } catch (MalformedJwtException ex) {
-            log.info("Invalid JWT token");
-            throw new BusinessException(ErrorCode.INVALID_JWT);
-        } catch (ExpiredJwtException ex) {
-            log.info("Expired JWT token");
-            throw new BusinessException(ErrorCode.INVALID_JWT);
-        } catch (UnsupportedJwtException ex) {
-            log.info("Unsupported JWT token");
-            throw new BusinessException(ErrorCode.INVALID_JWT);
-        } catch (IllegalArgumentException ex) {
-            log.info("JWT claims string is empty.");
-            throw new BusinessException(ErrorCode.INVALID_JWT);
-        } catch (Exception e) {
-            throw new BusinessException(ErrorCode.INVALID_JWT);
-        }
+        final Claims claims = accessTokenProvider.decodeToken(accessToken);
 
         // 정보가 없으면 에러를 내자
         final var id = claims.get("userId", Long.class);
