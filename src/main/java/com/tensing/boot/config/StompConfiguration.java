@@ -1,6 +1,6 @@
 package com.tensing.boot.config;
 
-import com.tensing.boot.global.filters.security.service.SecurityService;
+import com.tensing.boot.global.security.service.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Configuration;

@@ -6,7 +6,7 @@ import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.common.AcceptanceTestExecutionListener;
 import com.tensing.boot.common.ConstrainedFields;
-import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
+import com.tensing.boot.global.security.model.dto.SecurityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.*;
 import org.springframework.beans.factory.annotation.Autowired;

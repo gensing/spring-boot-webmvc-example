@@ -1,6 +1,6 @@
 package com.tensing.boot.common;
 
-import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
+import com.tensing.boot.global.security.model.dto.SecurityDto;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.context.SecurityContext;

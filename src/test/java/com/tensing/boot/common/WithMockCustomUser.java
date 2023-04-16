@@ -1,6 +1,6 @@
 package com.tensing.boot.common;
 
-import com.tensing.boot.global.filters.security.model.code.RoleCode;
+import com.tensing.boot.global.security.model.code.RoleCode;
 import org.springframework.security.test.context.support.WithSecurityContext;
 
 import java.lang.annotation.Retention;

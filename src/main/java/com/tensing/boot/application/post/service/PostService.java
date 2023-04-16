@@ -2,7 +2,7 @@ package com.tensing.boot.application.post.service;
 
 import com.tensing.boot.application.post.model.dto.PostDto;
 import com.tensing.boot.application.post.model.dto.SearchCondition;
-import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
+import com.tensing.boot.global.security.model.dto.SecurityDto;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;

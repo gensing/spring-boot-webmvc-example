@@ -1,7 +1,7 @@
 package com.tensing.boot.config;
 
-import com.tensing.boot.global.filters.security.filter.JwtAuthenticationFilter;
-import com.tensing.boot.global.filters.security.filter.JwtAuthorizationFilter;
+import com.tensing.boot.global.security.filter.JwtAuthenticationFilter;
+import com.tensing.boot.global.security.filter.JwtAuthorizationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

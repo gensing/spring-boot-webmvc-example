@@ -2,7 +2,7 @@ package com.tensing.boot.application.member.model;
 
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.model.data.MemberEntity;
-import com.tensing.boot.global.filters.security.model.code.RoleCode;
+import com.tensing.boot.global.security.model.code.RoleCode;
 import org.mapstruct.Mapper;
 import org.mapstruct.Mapping;
 import org.mapstruct.Mappings;

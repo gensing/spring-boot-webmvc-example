@@ -7,7 +7,7 @@ import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
 import com.tensing.boot.config.AppConfiguration;
 import com.tensing.boot.config.properties.PropertiesConfiguration;
-import com.tensing.boot.global.filters.security.model.dto.SecurityDto;
+import com.tensing.boot.global.security.model.dto.SecurityDto;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;

@@ -3,7 +3,7 @@ package com.tensing.boot.config;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.SerializationFeature;
 import com.fasterxml.jackson.datatype.jsr310.JavaTimeModule;
-import com.tensing.boot.global.filters.security.provider.TokenProvider;
+import com.tensing.boot.global.security.provider.TokenProvider;
 import com.tensing.boot.config.properties.JwtProperties;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
