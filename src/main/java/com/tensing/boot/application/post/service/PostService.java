@@ -9,7 +9,7 @@ import java.util.List;
 
 public interface PostService {
 
-    List<PostDto.PostResponse> getList(Pageable pageable);
+    List<PostDto.PostResponse> getList(Pageable pageable, SearchCondition searchCondition);
 
     PostDto.PostResponse get(long postId);
 
@@ -19,5 +19,4 @@ public interface PostService {
 
     void delete(long postId, SecurityDto.UserInfo sessionInfo);
 
-    List<PostDto.PostResponse> search(SearchCondition searchCondition, Pageable pageable);
 }

@@ -9,6 +9,7 @@ import com.tensing.boot.application.post.service.PostService;
 import com.tensing.boot.global.exception.exception.BusinessException;
 import com.tensing.boot.global.exception.model.code.ErrorCode;
 import com.tensing.boot.global.security.model.dto.SecurityDto;
+import io.micrometer.common.util.StringUtils;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.cache.annotation.CacheEvict;
@@ -40,16 +41,10 @@ public class PostServiceImpl implements PostService {
 
     @Transactional(readOnly = true)
     @Override
-    public List<PostDto.PostResponse> search(SearchCondition searchCondition, Pageable pageable) {
-        final var postDocumentList = postDocumentRepository.search(searchCondition, pageable);
-        return postDocumentList.stream().map(postMapper::toPostResponse).toList();
-    }
-
-    @Transactional(readOnly = true)
-    @Override
-    public List<PostDto.PostResponse> getList(Pageable pageable) {
-        final var postEntityList = postEntityRepository.findList(pageable);
-        return postEntityList;
+    public List<PostDto.PostResponse> getList(Pageable pageable, SearchCondition searchCondition) {
+        return (searchCondition == null || StringUtils.isEmpty(searchCondition.getSearch()))
+                ? postEntityRepository.findList(pageable)
+                : postDocumentRepository.search(searchCondition, pageable).stream().map(postMapper::toPostResponse).toList();
     }
 
     @Cacheable(value = "postResponseCache", key = "#postId")

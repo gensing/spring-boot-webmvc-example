@@ -40,8 +40,8 @@ public class PostController {
 
     @GetMapping("")
     @ResponseStatus(HttpStatus.OK)
-    public List<PostDto.PostResponse> getList(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable) {
-        return postService.getList(pageable);
+    public List<PostDto.PostResponse> getList(@PageableDefault(page = 0, size = 10, direction = Sort.Direction.DESC) Pageable pageable, SearchCondition searchCondition) {
+        return postService.getList(pageable, searchCondition);
     }
 
     @GetMapping("/{postId}")
@@ -64,12 +64,6 @@ public class PostController {
     @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public void delete(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long postId) {
         postService.delete(postId, sessionInfo);
-    }
-
-    @GetMapping("/_search")
-    @ResponseStatus(HttpStatus.OK)
-    public List<PostDto.PostResponse> search(SearchCondition searchCondition, @PageableDefault(page = 0, size = 10) Pageable pageable) {
-        return postService.search(searchCondition, pageable);
     }
 
 }
