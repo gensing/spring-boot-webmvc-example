@@ -1,7 +1,6 @@
 package com.tensing.boot.global.security.model.dto;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
-import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 import lombok.experimental.FieldNameConstants;
 
@@ -36,7 +35,6 @@ public class SecurityDto {
     @NoArgsConstructor
     public static class TokenRequest {
 
-        @Schema(description = "로그인 방식 설정 필드", defaultValue = "USER_INFO")
         private GranType grantType = GranType.ISSUE;
         private String username;
         private String password;

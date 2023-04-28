@@ -3,7 +3,6 @@ package com.tensing.boot.global.exception;
 import com.tensing.boot.global.exception.exception.BusinessException;
 import com.tensing.boot.global.exception.model.code.ErrorCode;
 import com.tensing.boot.global.exception.model.dto.ErrorMessages;
-import io.swagger.v3.oas.annotations.Hidden;
 import jakarta.servlet.RequestDispatcher;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.extern.slf4j.Slf4j;
@@ -24,7 +23,6 @@ import org.springframework.web.method.annotation.MethodArgumentTypeMismatchExcep
 import org.springframework.web.servlet.NoHandlerFoundException;
 
 @Slf4j
-@Hidden
 @RestController
 @RestControllerAdvice
 public class GlobalExceptionAdvice implements ErrorController {

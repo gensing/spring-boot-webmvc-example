@@ -3,10 +3,8 @@ package com.tensing.boot.application.post.controller;
 import com.tensing.boot.application.post.model.dto.PostDto;
 import com.tensing.boot.application.post.model.dto.SearchCondition;
 import com.tensing.boot.application.post.service.PostService;
-import com.tensing.boot.config.OpenApiConfiguration;
 import com.tensing.boot.global.security.model.code.RoleCode;
 import com.tensing.boot.global.security.model.dto.SecurityDto;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Pageable;
@@ -31,7 +29,6 @@ public class PostController {
 
     @PostMapping("")
     @Secured(RoleCode.USER_VALUE)
-    @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public ResponseEntity<PostDto.PostResponse> create(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @RequestBody @Valid PostDto.PostRequest postRequest, UriComponentsBuilder b) {
         var newPost = postService.insert(postRequest, sessionInfo);
         var uriComponents = b.path("/api/posts/{id}").buildAndExpand(newPost.getId());
@@ -53,7 +50,6 @@ public class PostController {
     @PutMapping("/{postId}")
     @Secured(RoleCode.USER_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public PostDto.PostResponse put(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long postId, @RequestBody @Valid PostDto.PostPutRequest postPutRequest) {
         return postService.update(postId, postPutRequest, sessionInfo);
     }
@@ -61,7 +57,6 @@ public class PostController {
     @DeleteMapping("/{postId}")
     @Secured(RoleCode.USER_VALUE)
     @ResponseStatus(HttpStatus.OK)
-    @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public void delete(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long postId) {
         postService.delete(postId, sessionInfo);
     }

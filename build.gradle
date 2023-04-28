@@ -34,7 +34,8 @@ repositories {
 }
 
 bootJar {
-    dependsOn('copySwaggerUI')
+    // build 사용
+    // dependsOn('copySwaggerUI')
 }
 
 dependencies {
@@ -65,10 +66,6 @@ dependencies {
 
     // yaml 자동완성 및 변수 매칭 기능, spring assistant plugin install 및 설정 필요 할수도 in idea
     implementation 'org.springframework.boot:spring-boot-configuration-processor'
-
-    // swagger dependencies ( boot 3 버전은 springdoc 2 버전 사용해야한다.)
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
-    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-api:2.0.2'
 
     // logstash 전용 log 파일 생성을 위한 라이브러리
     implementation 'net.logstash.logback:logstash-logback-encoder:7.3'

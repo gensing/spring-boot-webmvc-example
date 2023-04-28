@@ -18,19 +18,10 @@ spring:
       port: 6379
   kafka:
     bootstrap-servers: localhost:9093
-
-spring-doc:
-  api-docs:
-    path: /api-docs
-    enabled: true
-  swagger-ui:
-    path: /swagger-ui.html
-    display-request-duration: true
-    enabled: true
 logging:
   level:
     root: debug #INFO
-    org.apache.kafka: info
+    org.apache.kafka: error
 
 tensing:
   jwt:

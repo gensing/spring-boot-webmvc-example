@@ -2,10 +2,8 @@ package com.tensing.boot.application.member.controller;
 
 import com.tensing.boot.application.member.model.dto.MemberDto;
 import com.tensing.boot.application.member.service.MemberService;
-import com.tensing.boot.config.OpenApiConfiguration;
 import com.tensing.boot.global.security.model.code.RoleCode;
 import com.tensing.boot.global.security.model.dto.SecurityDto;
-import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -32,7 +30,6 @@ public class MemberController {
     @GetMapping("/{memberId}")
     @ResponseStatus(HttpStatus.OK)
     @Secured(value = RoleCode.USER_VALUE)
-    @SecurityRequirement(name = OpenApiConfiguration.API_SCHEME_NAME_001)
     public MemberDto.MemberResponse getMember(@AuthenticationPrincipal SecurityDto.UserInfo sessionInfo, @PathVariable long memberId) {
         final var member = memberService.findMember(memberId, sessionInfo);
         return member;

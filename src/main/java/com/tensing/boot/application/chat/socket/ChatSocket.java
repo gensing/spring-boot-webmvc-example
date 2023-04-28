@@ -3,7 +3,6 @@ package com.tensing.boot.application.chat.socket;
 import com.tensing.boot.application.chat.service.ChatService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.lang3.exception.ExceptionUtils;
 import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.messaging.MessageHeaders;
 import org.springframework.messaging.handler.annotation.Headers;
@@ -29,7 +28,7 @@ public class ChatSocket {
     @MessageExceptionHandler
     public String handleException(Throwable exception) {
         log.info("handleException");
-        log.info(ExceptionUtils.getStackTrace(exception));
+        log.info(exception.getMessage());
         return exception.getMessage();
     }
 
